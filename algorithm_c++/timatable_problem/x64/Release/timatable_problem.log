@@ -1,0 +1,10 @@
+﻿  main.cpp
+  The contents of <format> are available only in c++latest mode with concepts support;
+  see https://github.com/microsoft/STL/issues/1814 for details.
+  The contents of <string_view> are available only with C++17 or later.
+  Создание кода
+  1 of 703 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  timatable_problem.vcxproj -> C:\Users\Александр\source\repos\timatable_problem\x64\Release\timatable_problem.exe

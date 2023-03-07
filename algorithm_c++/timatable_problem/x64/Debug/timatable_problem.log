@@ -1,0 +1,5 @@
+﻿  main.cpp
+  The contents of <format> are available only in c++latest mode with concepts support;
+  see https://github.com/microsoft/STL/issues/1814 for details.
+  The contents of <string_view> are available only with C++17 or later.
+  timatable_problem.vcxproj -> C:\Users\Александр\source\repos\timatable_problem\x64\Debug\timatable_problem.exe
