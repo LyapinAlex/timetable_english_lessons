@@ -56,17 +56,7 @@ def read_data(name = None, i = 0):
     data['minNumber'] = 2# min number of students in the group
     data['maxNumber'] = 8# max number of students in the group
     data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
-    # data['J'] = 2# num of studetns
-    # data['L'] = 1# num of course
-    # data['D'] = 3# num of day
-    # data['T'] = 6# num of timslots in the day
-    # data['I'] = 5# num of teachers
-    # data['r'] = 1# num of rooms
-    # data['minNumber'] = 1# min number of students in the group
-    # data['maxNumber'] = 4# max number of students in the group
-    # data['timeLessons']  = np.array([3])
-    
-    
+        
     data['timeslot_of_students'] = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((data['J'], data['D'], data['T']))
     data['course_of_students'] = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((data['J'], data['L']))
 
@@ -333,6 +323,8 @@ class Problem:
                 self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 32)*self.P[i, d])
 
 
+
+
     def calculate(self, time):
         self.model.reset()
         # model._cur_obj = float('inf')
@@ -408,15 +400,13 @@ class Problem:
 
         f.write(f"sum students: {sm_st}\n")
         f.write(f"sum groups: {sm_gr}\n")
-        # f.write(f"ObjVal : {self.model.objVal}\n")
-        # f.write(f"gap : {self.model.gap}")   
+        f.write(f"ObjVal : {self.model.objVal}\n")
+        f.write(f"gap : {self.model.gap}")   
         f.close()
 
 
 
-# for i in range(1,6,1):
-i =1 
+
+i = 1 
 p = Problem(i)
-p.calculate(3600)
-# p = Problem(1)
-# p.calculate(3600)
+p.calculate(600)
