@@ -417,7 +417,7 @@ class Problem:
 
 
 
-
-i = 1 
-p = Problem(i)
-p.calculate(600)
+def launch():
+    i = 1 
+    p = Problem(i)
+    p.calculate(600)

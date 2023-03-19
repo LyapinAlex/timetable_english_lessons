@@ -4351,3 +4351,7 @@ Solution count 3: 13 3 -0
 
 Time limit reached
 Best objective 1.300000000000e+01, best bound 4.100000000000e+01, gap 215.3846%
+
+Gurobi 9.5.1 (win64) logging started Sun Mar 19 11:09:22 2023
+
+Set parameter LogFile to value "consol_info_1"
