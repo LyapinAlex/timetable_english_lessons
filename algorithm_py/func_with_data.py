@@ -1,5 +1,8 @@
 import numpy as np
+import json
 from tabulate import tabulate
+
+
 
 def get_list_of_couple_of_days(num_days):
     list = []
@@ -224,9 +227,8 @@ def get_objVal(data, first_path_sol, second_path_sol):
 
     objVal = 0.0
 
-    # print(gr)
     groups = first_path_sol["groups"]
-    # print(groups)
+
     
     for gr in groups:
         course_gr[gr[2]].append(1)
@@ -260,3 +262,22 @@ def get_objVal(data, first_path_sol, second_path_sol):
     objVal-=penalty
 
     return objVal
+
+def JSON_import( first_path_sol ):
+
+
+    groups = first_path_sol['groups'] 
+
+    print(type(groups[0][2]))
+
+    for gr in groups:
+        d_1 = [int(gr[3][0]), int(gr[3][1]), int(gr[3][2])]
+        d_2 = [int(gr[4][0]), int(gr[4][1]), int(gr[4][2])]
+        gr[3] = d_1
+        gr[4] = d_2
+        gr[2] = int(gr[2])
+        gr[6] = int(gr[6])
+
+
+    with open('sol.json','w') as file:
+        json.dump(groups, file, indent= 3)

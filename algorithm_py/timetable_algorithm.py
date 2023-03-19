@@ -42,10 +42,12 @@ def algorithm(i, locationParams = None, solutionsFromDB = None):
 
     # print(count_students(data, first_path_sol, second_path_sol), get_objVal(data, first_path_sol, second_path_sol))
     sol = get_solution( first_path_sol)
-    # objVal = get_objVal(data, first_path_sol, second_path_sol)
+    
+    JSON_import( first_path_sol )
     return sol
 
 if __name__ == "__main__":
 
-    for i in range(1,11):
-        algorithm(i)
+    algorithm(1)
+    # for i in range(1,11):
+    #     algorithm(i)

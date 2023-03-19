@@ -52,13 +52,14 @@ def read_data(name = None, i = 0):
     data['D'] = 6# num of day
     data['T'] = 11# num of timslots in the day
     data['I'] = 5# num of teachers
-    data['r'] = 1# num of rooms
+    data['r'] = 2# num of rooms
     data['minNumber'] = 2# min number of students in the group
     data['maxNumber'] = 8# max number of students in the group
     data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
-        
-    data['timeslot_of_students'] = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((data['J'], data['D'], data['T']))
+ 
+
     data['course_of_students'] = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((data['J'], data['L']))
+    data['timeslot_of_students'] = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((data['J'], data['D'], data['T']))
 
     return data
 
@@ -85,7 +86,7 @@ K = np.arange(0, 5, 1) # Количество групп
 L = np.arange(0, 13, 1) # Множество курсов
 D = np.arange(0, 6, 1) # Рабочие дни
 T = np.arange(0, 44, 1) # Множество временных слотов
-I = np.arange(0, 5, 1) # Множество преподователь 
+I = np.arange(0, 1, 1) # Множество преподователь 
 r = 4 # Количество комнат
 # J = np.arange(0, 500, 1) # Заявки
 # K = np.arange(0, 15, 1) # Количество групп
@@ -96,7 +97,7 @@ r = 4 # Количество комнат
 # r = 4 # Количество комнат
 
 F = [] # Штрафы на создание каждой новой группы, созданно для борьбы с симметрией
-for i in range(0, len(L)):
+for i in range(0, 13):
   F.append([])
 for i in K:
   if ( i < 1):
@@ -148,7 +149,7 @@ class Problem:
         self.i = i
         # str = f"C:/Users/Александр/source/vscode_project/Operation research/examples_copy/orders_2_{i}.txt"
         # f"examples_copy\\orders_hand_make.txt"
-        # data = read_data(f"examples_copy\\orders_3_{i}.txt")
+        # data = read_data("examples_copy\\orders_hm.txt")
         data = read_data(f"examples_copy\\orders_2_{i}.txt")
         self.a =restruct(data['J'], data['D'], data['T'], data['L'], data['timeLessons'], data['timeslot_of_students'], data['course_of_students']  )
         self.b = data['course_of_students'] 
@@ -176,8 +177,8 @@ class Problem:
         # Целевая функция 
 
         #(1)
+        # self.model.setObjective(gr.quicksum(self.y[j, k] for k in K for j in J), gr.GRB.MAXIMIZE)
         self.model.setObjective(gr.quicksum(self.y[j, k] for k in K for j in J) - gr.quicksum( F[l,k]*self.z[k, l] for k in K for l in L), gr.GRB.MAXIMIZE)
-
         # Условия 
         # self.x[d, t, k, l]= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l]
 
@@ -269,8 +270,8 @@ class Problem:
                 for t in T:
                     for k in K:
                         for l in L:
-                            # self.model.addLConstr(self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])
-                            # self.model.addLConstr(self.U[i, d, t, k, l] <= self.u[i, k, l])
+                            self.model.addLConstr(self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])
+                            self.model.addLConstr(self.U[i, d, t, k, l] <= self.u[i, k, l])
                             self.model.addLConstr(self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l] + self.u[i, k, l] - self.U[i, d, t, k, l] <= 1)
 
         #(15) Преподаватель в любой момент времени работает только с одной группой
@@ -321,7 +322,7 @@ class Problem:
         for i in I:
             for d in D:
                 self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 32)*self.P[i, d])
-
+                # self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 20)*self.P[i, d])
 
 
 
@@ -330,7 +331,12 @@ class Problem:
         # model._cur_obj = float('inf')
         # model._time = time.time()
         self.model.params.TimeLimit = time
+        # self.model.setParam("MIPFocus", 2)
+        # self.model.setParam("Presolve", 2)
+    #     MIPFocus 2
+	# Presolve 2
         self.model.update()
+        # self.model.tune()
         self.model.optimize()
 
         
@@ -376,7 +382,9 @@ class Problem:
                 for k in K:
                     for l in L:
                         if (  int(self.c[d, t, k, l].X) + int(self.s[d, t, k, l].X) - int(self.p[d, k, l].X) == 1):
-                            lessons.append(f"Gr{k}, Cr{l}")
+                            for i in I:
+                                if int(self.u[i,k,l].X) == 1:
+                                    lessons.append(f"Gr{k}, Cr{l}, Th{i}")
                 week.append(lessons)
             value_list.append(week)
 
@@ -401,8 +409,11 @@ class Problem:
         f.write(f"sum students: {sm_st}\n")
         f.write(f"sum groups: {sm_gr}\n")
         f.write(f"ObjVal : {self.model.objVal}\n")
-        f.write(f"gap : {self.model.gap}")   
         f.close()
+
+        self.model.write("English_Lesson.lp")
+        self.model.write("English_Lesson.sol")
+
 
 
 
