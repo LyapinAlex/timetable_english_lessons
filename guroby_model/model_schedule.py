@@ -4,7 +4,6 @@ import gurobipy as gr
 from gurobipy import GRB
 import time
 from tabulate import tabulate
-import gurobipy as gr
 
 def restruct(J, D, T, L, tl, A, B ):
     
@@ -28,7 +27,7 @@ def restruct(J, D, T, L, tl, A, B ):
                                 else:
                                      a[j,d,k*t+ k-1 + t_p] = 1
 
-
+    # print(a[0])
     return a
 
 
@@ -47,16 +46,25 @@ def read_data(name = None, i = 0):
     fileOrders.close()
 
     data = {}
-    data['J'] = 500# num of studetns
-    data['L'] = 13# num of course
+    # data['J'] = 500# num of studetns
+    # data['L'] = 13# num of course
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the day
+    # data['I'] = 5# num of teachers
+    # data['r'] = 4# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 8# max number of students in the group
+    # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
+    data['J'] = 150
+    data['L'] = 3
     data['D'] = 6# num of day
-    data['T'] = 11# num of timslots in the day
-    data['I'] = 5# num of teachers
+    data['T'] = 11# num of timslots in the 
+    data['I'] = 3# num of teachers
     data['r'] = 2# num of rooms
     data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 8# max number of students in the group
-    data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
- 
+    data['maxNumber'] = 6# max number of students in the group
+    data['timeLessons']  = np.array([ 4, 5, 6])
+
 
     data['course_of_students'] = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((data['J'], data['L']))
     data['timeslot_of_students'] = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((data['J'], data['D'], data['T']))
@@ -81,13 +89,13 @@ def cb(model, where):
     if time.time() - model._time > 60*30:
         model.terminate()
 
-J = np.arange(0, 100, 1) # Заявки
-K = np.arange(0, 5, 1) # Количество групп
-L = np.arange(0, 13, 1) # Множество курсов
+J = np.arange(0, 150, 1) # Заявки
+K = np.arange(0, 15, 1) # Количество групп
+L = np.arange(0, 3, 1) # Множество курсов
 D = np.arange(0, 6, 1) # Рабочие дни
 T = np.arange(0, 44, 1) # Множество временных слотов
-I = np.arange(0, 1, 1) # Множество преподователь 
-r = 4 # Количество комнат
+I = np.arange(0, 3, 1) # Множество преподователь 
+r = 2 # Количество комнат
 # J = np.arange(0, 500, 1) # Заявки
 # K = np.arange(0, 15, 1) # Количество групп
 # L = np.arange(0, 13, 1) # Множество курсов
@@ -150,7 +158,7 @@ class Problem:
         # str = f"C:/Users/Александр/source/vscode_project/Operation research/examples_copy/orders_2_{i}.txt"
         # f"examples_copy\\orders_hand_make.txt"
         # data = read_data("examples_copy\\orders_hm.txt")
-        data = read_data(f"examples_copy\\orders_2_{i}.txt")
+        data = read_data(f"examples_copy\\orders_1_{i}.txt")
         self.a =restruct(data['J'], data['D'], data['T'], data['L'], data['timeLessons'], data['timeslot_of_students'], data['course_of_students']  )
         self.b = data['course_of_students'] 
         self.lt = data['timeLessons']
@@ -190,7 +198,7 @@ class Problem:
                 for l in L:
                     self.model.addLConstr(gr.quicksum((self.b[j, l]*self.a[j, d, t]*(self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])) for d in D for t in T) >= 2*self.b[j, l]* self.lt[l] * self.y[j, k])
 
-   
+
         #(3) В любой момент времени не может быть больше пар, чем число комнат 
         for d in D:
             for t in T:
@@ -336,8 +344,12 @@ class Problem:
     #     MIPFocus 2
 	# Presolve 2
         self.model.update()
+
+        self.model.write("English_Lesson.lp")
+        return 0
+        # self.model.write("English_Lesson.sol")
         # self.model.tune()
-        self.model.optimize()
+        # self.model.optimize()
 
         
         # f=open(f"gurobiSchedule_hm.txt","w")
@@ -382,9 +394,10 @@ class Problem:
                 for k in K:
                     for l in L:
                         if (  int(self.c[d, t, k, l].X) + int(self.s[d, t, k, l].X) - int(self.p[d, k, l].X) == 1):
-                            for i in I:
-                                if int(self.u[i,k,l].X) == 1:
-                                    lessons.append(f"Gr{k}, Cr{l}, Th{i}")
+                            lessons.append(f"Gr{k}, Cr{l}")
+                            # for i in I:
+                            #     if int(self.u[i,k,l].X) == 1:
+                            #         lessons.append(f"Gr{k}, Cr{l}")
                 week.append(lessons)
             value_list.append(week)
 
@@ -411,9 +424,6 @@ class Problem:
         f.write(f"ObjVal : {self.model.objVal}\n")
         f.close()
 
-        self.model.write("English_Lesson.lp")
-        self.model.write("English_Lesson.sol")
-
 
 
 
@@ -421,3 +431,6 @@ def launch():
     i = 1 
     p = Problem(i)
     p.calculate(600)
+
+if __name__ == "__main__":
+    launch()

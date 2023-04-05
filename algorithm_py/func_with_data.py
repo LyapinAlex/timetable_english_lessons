@@ -2,6 +2,7 @@ import numpy as np
 import json
 from tabulate import tabulate
 
+# def sol_export_gurobi(data, first_path_sol, second_path_sol):
 
 
 def get_list_of_couple_of_days(num_days):
@@ -28,16 +29,26 @@ def read_data(name = None, i = 0):
     fileOrders.close()
 
     data = {}
-    data['J'] = 500# num of studetns
-    data['L'] = 13# num of course
-    data['D'] = 6# num of day
-    data['T'] = 11# num of timslots in the day
-    data['I'] = 5# num of teachers
-    data['r'] = 4# num of rooms
-    data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 8# max number of students in the group
-    data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
+    # data['J'] = 500# num of studetns
+    # data['L'] = 13# num of course
+    # data['I'] = 5# num of teachers
+    # data['r'] = 4# num of rooms
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the 
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 8# max number of students in the group
+    # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
     
+    data['J'] = 150
+    data['L'] = 3
+    data['D'] = 6# num of day
+    data['T'] = 11# num of timslots in the 
+    data['I'] = 3# num of teachers
+    data['r'] = 2# num of rooms
+    data['minNumber'] = 2# min number of students in the group
+    data['maxNumber'] = 6# max number of students in the group
+    data['timeLessons']  = np.array([ 4, 5, 6])
+
     data['couple_of_Days'] =  get_list_of_couple_of_days(data['D'])
     
     data['timeslot_of_students'] = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((data['J'], data['D'], data['T']))
@@ -46,7 +57,7 @@ def read_data(name = None, i = 0):
     return data
 
 
-def print_schedule(data, first_path_sol, second_path_sol, ind):
+def print_schedule(data, first_path_sol, second_path_sol, ind = 0):
     
    
     I = data['I']
@@ -268,16 +279,24 @@ def JSON_import( first_path_sol ):
 
     groups = first_path_sol['groups'] 
 
-    print(type(groups[0][2]))
+
+    list_gr = []
 
     for gr in groups:
+        
+        if gr[5] == False:
+            continue
+        g = []
+        g.append(gr[0])
+        g.append(int(gr[1]))
         d_1 = [int(gr[3][0]), int(gr[3][1]), int(gr[3][2])]
         d_2 = [int(gr[4][0]), int(gr[4][1]), int(gr[4][2])]
-        gr[3] = d_1
-        gr[4] = d_2
-        gr[2] = int(gr[2])
-        gr[6] = int(gr[6])
+        g.append(int(gr[2]))
+        g.append( d_1)
+        g.append( d_2)
+        g.append(int(gr[6]))
+        list_gr.append(g)
 
 
     with open('sol.json','w') as file:
-        json.dump(groups, file, indent= 3)
+        json.dump(list_gr, file, indent= 3)

@@ -1,3 +1,3 @@
-sum students: 13
-sum groups: 4
-ObjVal : 13.0
+sum students: 45
+sum groups: 10
+ObjVal : 32.5

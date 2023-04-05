@@ -8,7 +8,7 @@ import pdb
 def base_reconstruct(data, sol_1, sol_2):
 
     
-    reforming_groups(sol_1)# закончил
+    reforming_groups(sol_1)
     
     add_new_groups( data, sol_1, sol_2)
     

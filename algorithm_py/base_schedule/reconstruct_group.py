@@ -37,8 +37,11 @@ def change_format_group(data, sol):
 
 def sorting(list):
 
-    for k_1 in range(86):
-        for k_2 in range(86):
+    for k_1 in range(len(list)):
+        for k_2 in range(len(list)):
+
+    # for k_1 in range(86):
+    #     for k_2 in range(86):
             a = list[k_1]
             b = list[k_2]
             a_v = len(a[0])*10000 + (44 - max(a[3][2] - a[3][1], a[4][2] - a[4][1]))*100 + (13 - a[2])
