@@ -1,7 +1,9 @@
 import json
 import numpy as np
-from params import *
+# from params import *
 from tabulate import tabulate
+
+from sol_analys.params import *
 
 class Solution:
 

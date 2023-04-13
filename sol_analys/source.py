@@ -1,17 +1,33 @@
-from data import *
-from solution import *
-from params import *
-from draw_timetable import *
+# from data import *
+# from solution import *
+# from params import *
+# from draw_timetable import *
+# from base_group.base_group import base_group
+# from base_schedule.base_schedule import base_schedule
+# from base_reconstruct.base_reconstruct import base_reconstruct
+# from func_with_data import *
+
+from sol_analys.data import *
+from sol_analys.solution import *
+from sol_analys.params import *
+from sol_analys.draw_timetable import *
+from sol_analys.base_group.base_group import base_group
+from sol_analys.base_schedule.base_schedule import base_schedule
+from sol_analys.base_reconstruct.base_reconstruct import base_reconstruct
+from sol_analys.func_with_data import *
+
+
+
+
 import numpy as np
-from base_group.base_group import base_group
-from base_schedule.base_schedule import base_schedule
-from base_reconstruct.base_reconstruct import base_reconstruct
-from func_with_data import *
 from tabulate import tabulate
 import copy
 import pdb
 import time
 import json
+
+
+
 
 local_set = [[0],[1],[2],[3],[4],
              [0,1],[0,2],[0,3],[0,4],
