@@ -51,9 +51,10 @@ class Data:
         input_str_b = orders[1]
         fileOrders.close()
 
-        # a = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((self.J, self.D, self.T))
+        a = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((self.J, self.D, self.T))
         self.courseRec = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((self.J, self.L))
-        self.timeRec = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((self.J, self.D, self.T))
+        # self.timeRec = np.fromstring(input_str_a, dtype = int, sep = ' ').reshape((self.J, self.D, self.T))
+        self.timeRec = restruct(self.J, self.D, self.T, self.L, self.timeL, a, self.courseRec )
         return 0
 
 

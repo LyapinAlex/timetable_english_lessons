@@ -1,4 +1,6 @@
 import numpy as np
+import copy
+import time
 from random import shuffle
 
 from .secondary_func import *
@@ -7,23 +9,46 @@ from .secondary_func import *
 def create_schedule(data, schedule):
     """ Создает первичное рассписание"""
 
+    timeL = data['timeLessons']
     r = data['r']
-    number_working_rooms = data['number_working_rooms'] 
     I = data['I']
-    T = data['T']
+
+    number_working_rooms = copy.copy(data['number_working_rooms'] )
+    for d in range(data['D']):
+        for t in range(4*data['T']):
+            number_working_rooms[d,t] = min(r - number_working_rooms[d,t], I)
+
+    T = 4*data['T']
     maxPerson = data['maxNumber']
     minPerson = data['minNumber']
     B = sort_by_num_students_in_course(data)
+
     couple_of_days = data['couple_of_Days']
     numDays = len(couple_of_days)
+    
+    timeSlots = data['timeslot_of_students']
+    
+    time_begin_for_st = []
+    for j in np.arange(data['J']):
+        for l in np.arange(data['L']):
+            if data['course_of_students'][j,l] == 1:
+                time_begin_for_st.append(time_for_begin(timeSlots[j], T , data['D'], timeL[l]))
+                break
 
+   
+
+    list_set_students = get_list_of__student(data)
+    
     
     for l in B: 
-    
 
-        array_data = create_array_rec(l, data, schedule)
-        print(array_data)
+        set_id_students = list_set_students[l]
+
+
+        array_data = create_array_rec(data, time_begin_for_st, set_id_students)
         cor = maxPerson
+
+        
         while cor >= minPerson:
             ind = False 
             
@@ -31,63 +56,23 @@ def create_schedule(data, schedule):
                 for t_2 in range(T):
                     for i in np.arange(numDays):
                         days = couple_of_days[i]
-                        r_1 = min(r - number_working_rooms[days[0], 4*t_1], r - number_working_rooms[days[0], 4*t_1 + 1], r - number_working_rooms[days[0], 4*t_1 + 2], r - number_working_rooms[days[0], 4*t_1 + 3], I)
-                        r_2 = min(r - number_working_rooms[days[1], 4*t_2], r - number_working_rooms[days[1], 4*t_2 + 1], r - number_working_rooms[days[1], 4*t_2 + 2], r - number_working_rooms[days[1], 4*t_2 + 3], I)
-                        
-                        if (schedule['rooms'][days[0], t_1] < r_1) and (schedule['rooms'][days[1], t_2] < r_2):
-                            if array_data[t_1,t_2, i] >= cor:
-                                list_students = create_group( i, t_1, t_2, l, cor, data, schedule)
-                                for j in list_students:
-                                    refresh_array(j , i, array_data, data)
 
+                        if array_data[t_1,t_2, i] >= cor:
+                            if check(t_1, t_2, timeL[l], number_working_rooms, days[0], days[1]):
+                                list_students = create_group( i, t_1, t_2, l, cor, data, schedule, set_id_students)
+                                for j in list_students:
+                                    refresh_array( i, array_data, data, time_begin_for_st[j])
+                                    set_id_students.remove(j)
+                                
+
+                                for t in range(timeL[l]):
+                                    number_working_rooms[days[0], t_1 + t]-=1
+                                    number_working_rooms[days[1], t_2 + t]-=1
                                 ind = True
 
 
             if ind == False:
                 cor -= 1
-    
+
+
     return None
-
-# def create_schedule_rand(data, schedule):
-#     r = data['r']
-#     T = data['T']
-#     L = data['L']
-#     maxPerson = data['maxNumber']
-#     minPerson = data['minNumber']
-#     couple_of_days = data['couple_of_Days']
-#     numDays = len(couple_of_days)
-
-#     course_order  = np.arange(L)
-#     shuffle(course_order)
-
-#     days_order = np.arange(numDays)
-#     shuffle(days_order)
-
-#     time_order = np.arange(T)
-#     shuffle(time_order)
-
-#     for l in course_order:
-    
-
-#         cor = maxPerson
-#         while cor >= minPerson:
-#             ind = False 
-#             array_data = create_array_rec(l, data, schedule)
-            
-#             for t_1 in time_order:
-#                 for t_2 in time_order:
-#                     for i in days_order:
-#                         days = couple_of_days[i]
-#                         if (schedule['rooms'][days[0], t_1] < r - number_working_rooms) and (schedule['rooms'][days[1], t_2] < r - number_working_rooms):
-#                             if array_data[t_1,t_2, i] >= cor:
-#                                 list_students = create_group( i, t_1, t_2, l, cor, data, schedule)
-#                                 for j in list_students:
-#                                     refresh_array(j , i, array_data, data)
-
-#                                 ind = True
-
-
-#             if ind == False:
-#                 cor -= 1
-    
-#     return None

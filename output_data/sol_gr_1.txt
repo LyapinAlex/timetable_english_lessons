@@ -1,0 +1,3 @@
+sum students: 45
+sum groups: 10
+ObjVal : 32.5

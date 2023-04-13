@@ -1,15 +1,27 @@
 from data import *
 from solution import *
 from params import *
+from draw_timetable import *
 import numpy as np
 from base_group.base_group import base_group
 from base_schedule.base_schedule import base_schedule
 from base_reconstruct.base_reconstruct import base_reconstruct
 from func_with_data import *
 from tabulate import tabulate
+import copy
 import pdb
 import time
-import math
+import json
+
+local_set = [[0],[1],[2],[3],[4],
+             [0,1],[0,2],[0,3],[0,4],
+             [1,2],[1,3],[1,4],
+             [2,3],[2,4],
+             [3,4],
+             [2,3,4],[1,3,4],[1,2,4],[1,2,3],
+             [0,3,4],[0,2,4],[0,2,3],
+             [0,1,4],[0,1,3],
+             [0,1,2]]
 
 
 # def analys(data, sol):
@@ -64,7 +76,6 @@ def clear_group_teachers(set_update_teachers, sol):
     i = 0
     while i < len(groups):
         if groups[i][5] in set_update_teachers:
-            print(groups[i])
             del groups[i]
         else:
             i += 1
@@ -80,6 +91,8 @@ def get_index_take_student(sol):
     return index_st 
 
 
+
+
 def get_new_input_data(data, sol, set_update_teachers):
     
 
@@ -89,14 +102,14 @@ def get_new_input_data(data, sol, set_update_teachers):
 
     new_J = len(set_dont_get_students)
 
-    time_rec = np.zeros((new_J, D, T))
+    time_rec = np.zeros((new_J, D, 4*T))
     course_rec = np.zeros((new_J, L))
 
     
     for j in range(len(set_dont_get_students)):
         new_j = set_dont_get_students[j]
         for d in range(D):
-            for t in range(T):
+            for t in range(4*T):
                 time_rec[j,d,t] = data.timeRec[new_j ,d,t]
 
         for l in range(L):
@@ -123,42 +136,84 @@ def get_new_input_data(data, sol, set_update_teachers):
     new_data['Set_I'] = set_update_teachers
     new_data['r'] = r # num of rooms
     new_data['number_working_rooms'] = number_working_rooms# num of rooms
-    new_data['minNumber'] = 2# min number of students in the group
-    new_data['maxNumber'] = 6# max number of students in the group
-    new_data['timeLessons']  = np.array([ 4, 5, 6])
+    new_data['minNumber'] = minN# min number of students in the group
+    new_data['maxNumber'] = maxN# max number of students in the group
+    new_data['timeLessons']  = timeL 
 
     new_data['couple_of_Days'] =  get_list_of_couple_of_days(D)
     
     new_data['timeslot_of_students'] = time_rec
     new_data['course_of_students'] = course_rec
 
+
     return new_data
+
+def local_search(num_it, data, sol, i):
+
+    best_val = get_sol(sol)
+    best_sol = copy.deepcopy(sol)
+    best_it = 0
+    last_loc = []
+
+    f = open(f"history_sol_{i}.txt","w")
+    for it in range(num_it): 
+        val = (0,0)
+        best_loc = []
+        new_sol = copy.deepcopy(sol)
+        for loc in local_set:
+            if loc in last_loc:
+                # print(loc)
+                continue
+            sol_copy = copy.deepcopy(sol)
+            rebuild_timetable(loc,data, sol_copy)
+            f.write(f"it: {it} local {loc} sol {get_sol(sol_copy)[0]} {get_sol(sol_copy)[1]} \n" )
+            if val[0] < get_sol(sol_copy)[0]:
+                new_sol = sol_copy
+                val = get_sol(sol_copy)
+                best_loc = loc
+        sol = new_sol
+        f.write(f" over it {it} best loc {best_loc}  sol {get_sol(new_sol)[0]} {get_sol(new_sol)[1]} \n")
+        if len(last_loc) == 3:
+            last_loc.pop(0)
+        last_loc.append(best_loc)
+        if get_sol(new_sol)[0] >best_val[0]:
+            best_sol = new_sol
+            best_val = get_sol(new_sol)
+            best_it =it
+
+    f.write(f" Best  sol {get_sol(best_sol)[0]} {get_sol(best_sol)[1]}, it { best_it} \n")
+    f.close()
+    return best_sol
 
 def rebuild_timetable(set_update_teachers,data, sol):
 
+    t = time.perf_counter()
     clear_group_teachers(set_update_teachers, sol)
-
+    
     sol.rename_group()
-    print_sol(sol)
-
     set_get_students = get_index_take_student(sol)
     set_dont_get_students = get_list_comp(range(J), set_get_students)
 
     new_data = get_new_input_data(data, sol, set_update_teachers )
-
-
-
     first_path_sol = base_group(new_data)
+    
     second_path_sol = base_schedule(new_data, first_path_sol)
 
+    # for __ in  range(4):
+    #     first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
+    #     second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
+
+
+
+    # base_reconstruct(new_data, first_path_sol, second_path_sol)
 
 
     groups = first_path_sol['groups'] 
     
     for gr in groups:
-        # print(gr)
         if gr[5] == False:
             continue
+        # print(gr)
         g = []
         set_st = []
         for j in gr[0]:
@@ -173,8 +228,10 @@ def rebuild_timetable(set_update_teachers,data, sol):
         g.append(new_data['Set_I'][int(gr[6])])
         sol.groups.append(g)
 
+    sol.rename_group()
+    # print("Time ",time.perf_counter() - t)
 
-def print_sol(sol):
+def get_sol(sol):
 
     groups = sol.groups
 
@@ -184,26 +241,40 @@ def print_sol(sol):
     for gr in groups:
         num_st+=len(gr[0])
 
-    print("st :", num_st, "gr :", num_gr)
+    return num_st, num_gr
+
 
 def launch():
-
     data = Data(J, L, I, T, D, r, minN, maxN, timeL )
-    data.read_input(filename_input)
-    
-    sol = Solution()
-    # print("Start solution")
-    # print(sol.groups)
-    print_sol(sol)
-    # print("------------------")
 
-    rebuild_timetable([0],data, sol)
-    sol.rename_group()
-    print_sol(sol)
-    # print("Rebuild solution")
-    # print(sol.groups)
-    # print("------------------")
-    # sol.print_schedule("rebuild_schedule")
+ 
+    # filename_data = f"examples_copy\\orders_2_6.txt"
+    # data.read_input(filename_data)
+
+    # filename_sol = f"sol_6.json"
+    # sol = Solution(filename_sol)
+    # t = time.perf_counter() 
+    # sol = local_search(10, data, sol, 1 )
+    # print(time.perf_counter() - t)
+    # print(get_sol(sol))
+
+
+    # sol.rooms_distribution()
+    # sol.creat_output_schedule("data_schedule_out2.txt")
+    # timetable_png("schedule2")
+    # JSON_import(sol.groups, "sol_all")
+
+    for i in range(1, 11):
+        data = Data(J, L, I, T, D, r, minN, maxN, timeL )
+        filename_data = f"examples_copy\\orders_2_{i}.txt"
+        data.read_input(filename_data)
+        filename_sol = f"sol_{i}.json"
+        sol = Solution(filename_sol)
+        print(get_sol(sol))
+        sol = local_search(15, data, sol, i )
+        print(get_sol(sol))
+        JSON_import(sol.groups, f"rebuild_sol_{i}.json")
+    
     
 
 if __name__ == '__main__':

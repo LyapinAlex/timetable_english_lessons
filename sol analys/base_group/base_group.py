@@ -19,19 +19,21 @@ def base_group(data, config = None):
 
     schedule = {
         'students': np.zeros((data['J'])), 
-        'groups': [ [] for __ in range(data['L'])],
-        'rooms': np.zeros((data['D'], 4*data['T']))  
+        'groups': [ [] for __ in range(data['L'])]
         }
    
     if config == None:
         create_schedule(data, schedule)
     
-    for l in range(data['L']):
-        for gr in schedule['groups'][l]:
-            print(gr)
-    
-    # if config == "rand":
-    #     create_schedule_rand(data, schedule)
+    # print(np.sum(schedule['students']))
+    # sum =0
+    # for l in range(data['L']):
+    #     sum+=len(schedule['groups'][l])
+    #     # for gr in schedule['groups'][l]:
+    #         # print(gr)
+    # print(sum)
+    # # if config == "rand":
+        # create_schedule_rand(data, schedule)
 
     return schedule 
 

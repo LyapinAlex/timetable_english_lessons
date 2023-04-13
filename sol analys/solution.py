@@ -5,10 +5,10 @@ from tabulate import tabulate
 
 class Solution:
 
-    def __init__(self, filename = None):
+    def __init__(self, filename ="sol.json"):
         
         
-        with open('sol.json','r') as file:
+        with open(filename,'r') as file:
             self.groups = json.load(file)
 
 
@@ -218,7 +218,78 @@ class Solution:
 
         f.close()
 
+    def rooms_distribution(self):
+
+        groups = self.groups 
+
+        rooms_number = np.zeros((timeslotsInHour*T, D, r)) 
+
+        for gr in groups:
+            gr.append(0)
+            gr.append(0)
 
 
+        for t in range(timeslotsInHour*T):
+
+            for gr in groups:
+                
+                
+                day_first = gr[3]
+                day_second = gr[4]
+
+                if day_first[1] != t and day_second[1] != t:
+                    continue
+                
+                l = gr[2]
+
+                if  day_first[1] == t:
+                    room = 0  
+                    for r_1 in range(r):
+                        if np.sum(rooms_number[day_first[1] + t_point, day_first[0],r_1] for t_point in range(timeL[l])) == 0:
+                            for t_point in range(timeL[l]):
+                                rooms_number[day_first[1] + t_point, day_first[0],r_1]=1
+                                
+                            room = r_1+1
+                            break
+                    
+                    gr[6] = room
+
+
+                if day_second[1] == t:
+
+
+                    room = 0
+
+
+                    for r_2 in range(r):
+                        if np.sum( rooms_number[day_second[1] + t_point, day_second[0],r_2] for t_point in range(timeL[l])) == 0:
+                            for t_point in range(timeL[l]):
+                                rooms_number[day_second[1] + t_point, day_second[0],r_2]=1
+                                
+                            room = r_2+1
+                            break
+
+                    gr[7] = room
+
+ 
+        return None
+
+    def creat_output_schedule(self, name):
+
+
+        groups = self.groups
         
+        f = open(name, 'w')
+        for gr in groups:
+            day_first = gr[3]
+            day_second = gr[4]
+            l = gr[2]
+            k = gr[1]
+            
+            i = gr[5]
+            room_1 = gr[6]
+            room_2 = gr[7]
+            f.write(f"{k}\t{l}\t{i}\t{room_1}\t{day_first[0]}\t{day_first[1]}\t{day_first[2]}\t{room_2}\t{day_second[0]}\t{day_second[1]}\t{day_second[2]}\n")
+        f.close()
+
         return None

@@ -1,0 +1,376 @@
+it: 0 local [0] sol 331 57 
+it: 0 local [1] sol 323 57 
+it: 0 local [2] sol 309 55 
+it: 0 local [3] sol 289 53 
+it: 0 local [4] sol 294 52 
+it: 0 local [0, 1] sol 349 62 
+it: 0 local [0, 2] sol 339 62 
+it: 0 local [0, 3] sol 333 57 
+it: 0 local [0, 4] sol 333 55 
+it: 0 local [1, 2] sol 329 58 
+it: 0 local [1, 3] sol 329 57 
+it: 0 local [1, 4] sol 326 55 
+it: 0 local [2, 3] sol 323 58 
+it: 0 local [2, 4] sol 309 53 
+it: 0 local [3, 4] sol 302 53 
+ over it 0 best loc [0, 1]  sol 302 53 
+it: 1 local [0] sol 357 65 
+it: 1 local [1] sol 330 61 
+it: 1 local [2] sol 323 62 
+it: 1 local [3] sol 322 62 
+it: 1 local [4] sol 331 59 
+it: 1 local [0, 2] sol 346 63 
+it: 1 local [0, 3] sol 351 61 
+it: 1 local [0, 4] sol 352 61 
+it: 1 local [1, 2] sol 316 57 
+it: 1 local [1, 3] sol 316 59 
+it: 1 local [1, 4] sol 323 59 
+it: 1 local [2, 3] sol 332 62 
+it: 1 local [2, 4] sol 314 61 
+it: 1 local [3, 4] sol 321 60 
+ over it 1 best loc [0]  sol 321 60 
+it: 2 local [1] sol 329 61 
+it: 2 local [2] sol 330 63 
+it: 2 local [3] sol 328 62 
+it: 2 local [4] sol 336 62 
+it: 2 local [0, 1] sol 349 62 
+it: 2 local [0, 2] sol 346 63 
+it: 2 local [0, 3] sol 351 61 
+it: 2 local [0, 4] sol 352 61 
+it: 2 local [1, 2] sol 345 65 
+it: 2 local [1, 3] sol 323 61 
+it: 2 local [1, 4] sol 329 61 
+it: 2 local [2, 3] sol 341 64 
+it: 2 local [2, 4] sol 341 64 
+it: 2 local [3, 4] sol 335 62 
+ over it 2 best loc [0, 4]  sol 335 62 
+it: 3 local [0] sol 353 63 
+it: 3 local [1] sol 327 57 
+it: 3 local [2] sol 329 60 
+it: 3 local [3] sol 324 61 
+it: 3 local [4] sol 327 58 
+it: 3 local [0, 1] sol 348 62 
+it: 3 local [0, 2] sol 355 64 
+it: 3 local [0, 3] sol 346 62 
+it: 3 local [1, 2] sol 335 60 
+it: 3 local [1, 3] sol 324 58 
+it: 3 local [1, 4] sol 337 60 
+it: 3 local [2, 3] sol 330 60 
+it: 3 local [2, 4] sol 340 60 
+it: 3 local [3, 4] sol 333 61 
+ over it 3 best loc [0, 2]  sol 333 61 
+it: 4 local [0] sol 343 62 
+it: 4 local [1] sol 345 63 
+it: 4 local [2] sol 340 64 
+it: 4 local [3] sol 330 62 
+it: 4 local [4] sol 332 61 
+it: 4 local [0, 1] sol 339 61 
+it: 4 local [0, 3] sol 348 65 
+it: 4 local [0, 4] sol 351 62 
+it: 4 local [1, 2] sol 331 61 
+it: 4 local [1, 3] sol 328 61 
+it: 4 local [1, 4] sol 320 58 
+it: 4 local [2, 3] sol 339 64 
+it: 4 local [2, 4] sol 350 61 
+it: 4 local [3, 4] sol 326 60 
+ over it 4 best loc [0, 4]  sol 326 60 
+it: 5 local [0] sol 342 62 
+it: 5 local [1] sol 328 60 
+it: 5 local [2] sol 337 61 
+it: 5 local [3] sol 316 60 
+it: 5 local [4] sol 338 61 
+it: 5 local [0, 1] sol 344 63 
+it: 5 local [0, 2] sol 349 62 
+it: 5 local [0, 3] sol 339 60 
+it: 5 local [1, 2] sol 323 57 
+it: 5 local [1, 3] sol 339 60 
+it: 5 local [1, 4] sol 347 62 
+it: 5 local [2, 3] sol 339 62 
+it: 5 local [2, 4] sol 340 60 
+it: 5 local [3, 4] sol 331 61 
+ over it 5 best loc [0, 2]  sol 331 61 
+it: 6 local [0] sol 345 62 
+it: 6 local [1] sol 322 60 
+it: 6 local [2] sol 323 59 
+it: 6 local [3] sol 333 60 
+it: 6 local [4] sol 331 60 
+it: 6 local [0, 1] sol 342 62 
+it: 6 local [0, 3] sol 345 62 
+it: 6 local [0, 4] sol 353 62 
+it: 6 local [1, 2] sol 325 58 
+it: 6 local [1, 3] sol 337 60 
+it: 6 local [1, 4] sol 325 59 
+it: 6 local [2, 3] sol 330 58 
+it: 6 local [2, 4] sol 347 61 
+it: 6 local [3, 4] sol 314 59 
+ over it 6 best loc [0, 4]  sol 314 59 
+it: 7 local [0] sol 353 63 
+it: 7 local [1] sol 325 61 
+it: 7 local [2] sol 331 60 
+it: 7 local [3] sol 323 58 
+it: 7 local [4] sol 327 58 
+it: 7 local [0, 1] sol 341 62 
+it: 7 local [0, 2] sol 347 60 
+it: 7 local [0, 3] sol 343 61 
+it: 7 local [1, 2] sol 324 57 
+it: 7 local [1, 3] sol 322 60 
+it: 7 local [1, 4] sol 330 58 
+it: 7 local [2, 3] sol 335 60 
+it: 7 local [2, 4] sol 337 61 
+it: 7 local [3, 4] sol 325 61 
+ over it 7 best loc [0]  sol 325 61 
+it: 8 local [1] sol 334 61 
+it: 8 local [2] sol 338 62 
+it: 8 local [3] sol 324 60 
+it: 8 local [4] sol 331 60 
+it: 8 local [0, 1] sol 341 62 
+it: 8 local [0, 2] sol 347 60 
+it: 8 local [0, 3] sol 343 61 
+it: 8 local [0, 4] sol 353 62 
+it: 8 local [1, 2] sol 339 58 
+it: 8 local [1, 3] sol 322 60 
+it: 8 local [1, 4] sol 334 60 
+it: 8 local [2, 3] sol 328 59 
+it: 8 local [2, 4] sol 331 61 
+it: 8 local [3, 4] sol 309 55 
+ over it 8 best loc [0, 4]  sol 309 55 
+it: 9 local [0] sol 353 63 
+it: 9 local [1] sol 325 61 
+it: 9 local [2] sol 331 60 
+it: 9 local [3] sol 323 58 
+it: 9 local [4] sol 327 58 
+it: 9 local [0, 1] sol 341 62 
+it: 9 local [0, 2] sol 347 60 
+it: 9 local [0, 3] sol 343 61 
+it: 9 local [1, 2] sol 324 57 
+it: 9 local [1, 3] sol 322 60 
+it: 9 local [1, 4] sol 330 58 
+it: 9 local [2, 3] sol 335 60 
+it: 9 local [2, 4] sol 337 61 
+it: 9 local [3, 4] sol 325 61 
+ over it 9 best loc [0]  sol 325 61 
+it: 10 local [1] sol 334 61 
+it: 10 local [2] sol 338 62 
+it: 10 local [3] sol 324 60 
+it: 10 local [4] sol 331 60 
+it: 10 local [0, 1] sol 341 62 
+it: 10 local [0, 2] sol 347 60 
+it: 10 local [0, 3] sol 343 61 
+it: 10 local [0, 4] sol 353 62 
+it: 10 local [1, 2] sol 339 58 
+it: 10 local [1, 3] sol 322 60 
+it: 10 local [1, 4] sol 334 60 
+it: 10 local [2, 3] sol 328 59 
+it: 10 local [2, 4] sol 331 61 
+it: 10 local [3, 4] sol 309 55 
+ over it 10 best loc [0, 4]  sol 309 55 
+it: 11 local [0] sol 353 63 
+it: 11 local [1] sol 325 61 
+it: 11 local [2] sol 331 60 
+it: 11 local [3] sol 323 58 
+it: 11 local [4] sol 327 58 
+it: 11 local [0, 1] sol 341 62 
+it: 11 local [0, 2] sol 347 60 
+it: 11 local [0, 3] sol 343 61 
+it: 11 local [1, 2] sol 324 57 
+it: 11 local [1, 3] sol 322 60 
+it: 11 local [1, 4] sol 330 58 
+it: 11 local [2, 3] sol 335 60 
+it: 11 local [2, 4] sol 337 61 
+it: 11 local [3, 4] sol 325 61 
+ over it 11 best loc [0]  sol 325 61 
+it: 12 local [1] sol 334 61 
+it: 12 local [2] sol 338 62 
+it: 12 local [3] sol 324 60 
+it: 12 local [4] sol 331 60 
+it: 12 local [0, 1] sol 341 62 
+it: 12 local [0, 2] sol 347 60 
+it: 12 local [0, 3] sol 343 61 
+it: 12 local [0, 4] sol 353 62 
+it: 12 local [1, 2] sol 339 58 
+it: 12 local [1, 3] sol 322 60 
+it: 12 local [1, 4] sol 334 60 
+it: 12 local [2, 3] sol 328 59 
+it: 12 local [2, 4] sol 331 61 
+it: 12 local [3, 4] sol 309 55 
+ over it 12 best loc [0, 4]  sol 309 55 
+it: 13 local [0] sol 353 63 
+it: 13 local [1] sol 325 61 
+it: 13 local [2] sol 331 60 
+it: 13 local [3] sol 323 58 
+it: 13 local [4] sol 327 58 
+it: 13 local [0, 1] sol 341 62 
+it: 13 local [0, 2] sol 347 60 
+it: 13 local [0, 3] sol 343 61 
+it: 13 local [1, 2] sol 324 57 
+it: 13 local [1, 3] sol 322 60 
+it: 13 local [1, 4] sol 330 58 
+it: 13 local [2, 3] sol 335 60 
+it: 13 local [2, 4] sol 337 61 
+it: 13 local [3, 4] sol 325 61 
+ over it 13 best loc [0]  sol 325 61 
+it: 14 local [1] sol 334 61 
+it: 14 local [2] sol 338 62 
+it: 14 local [3] sol 324 60 
+it: 14 local [4] sol 331 60 
+it: 14 local [0, 1] sol 341 62 
+it: 14 local [0, 2] sol 347 60 
+it: 14 local [0, 3] sol 343 61 
+it: 14 local [0, 4] sol 353 62 
+it: 14 local [1, 2] sol 339 58 
+it: 14 local [1, 3] sol 322 60 
+it: 14 local [1, 4] sol 334 60 
+it: 14 local [2, 3] sol 328 59 
+it: 14 local [2, 4] sol 331 61 
+it: 14 local [3, 4] sol 309 55 
+ over it 14 best loc [0, 4]  sol 309 55 
+it: 15 local [0] sol 353 63 
+it: 15 local [1] sol 325 61 
+it: 15 local [2] sol 331 60 
+it: 15 local [3] sol 323 58 
+it: 15 local [4] sol 327 58 
+it: 15 local [0, 1] sol 341 62 
+it: 15 local [0, 2] sol 347 60 
+it: 15 local [0, 3] sol 343 61 
+it: 15 local [1, 2] sol 324 57 
+it: 15 local [1, 3] sol 322 60 
+it: 15 local [1, 4] sol 330 58 
+it: 15 local [2, 3] sol 335 60 
+it: 15 local [2, 4] sol 337 61 
+it: 15 local [3, 4] sol 325 61 
+ over it 15 best loc [0]  sol 325 61 
+it: 16 local [1] sol 334 61 
+it: 16 local [2] sol 338 62 
+it: 16 local [3] sol 324 60 
+it: 16 local [4] sol 331 60 
+it: 16 local [0, 1] sol 341 62 
+it: 16 local [0, 2] sol 347 60 
+it: 16 local [0, 3] sol 343 61 
+it: 16 local [0, 4] sol 353 62 
+it: 16 local [1, 2] sol 339 58 
+it: 16 local [1, 3] sol 322 60 
+it: 16 local [1, 4] sol 334 60 
+it: 16 local [2, 3] sol 328 59 
+it: 16 local [2, 4] sol 331 61 
+it: 16 local [3, 4] sol 309 55 
+ over it 16 best loc [0, 4]  sol 309 55 
+it: 17 local [0] sol 353 63 
+it: 17 local [1] sol 325 61 
+it: 17 local [2] sol 331 60 
+it: 17 local [3] sol 323 58 
+it: 17 local [4] sol 327 58 
+it: 17 local [0, 1] sol 341 62 
+it: 17 local [0, 2] sol 347 60 
+it: 17 local [0, 3] sol 343 61 
+it: 17 local [1, 2] sol 324 57 
+it: 17 local [1, 3] sol 322 60 
+it: 17 local [1, 4] sol 330 58 
+it: 17 local [2, 3] sol 335 60 
+it: 17 local [2, 4] sol 337 61 
+it: 17 local [3, 4] sol 325 61 
+ over it 17 best loc [0]  sol 325 61 
+it: 18 local [1] sol 334 61 
+it: 18 local [2] sol 338 62 
+it: 18 local [3] sol 324 60 
+it: 18 local [4] sol 331 60 
+it: 18 local [0, 1] sol 341 62 
+it: 18 local [0, 2] sol 347 60 
+it: 18 local [0, 3] sol 343 61 
+it: 18 local [0, 4] sol 353 62 
+it: 18 local [1, 2] sol 339 58 
+it: 18 local [1, 3] sol 322 60 
+it: 18 local [1, 4] sol 334 60 
+it: 18 local [2, 3] sol 328 59 
+it: 18 local [2, 4] sol 331 61 
+it: 18 local [3, 4] sol 309 55 
+ over it 18 best loc [0, 4]  sol 309 55 
+it: 19 local [0] sol 353 63 
+it: 19 local [1] sol 325 61 
+it: 19 local [2] sol 331 60 
+it: 19 local [3] sol 323 58 
+it: 19 local [4] sol 327 58 
+it: 19 local [0, 1] sol 341 62 
+it: 19 local [0, 2] sol 347 60 
+it: 19 local [0, 3] sol 343 61 
+it: 19 local [1, 2] sol 324 57 
+it: 19 local [1, 3] sol 322 60 
+it: 19 local [1, 4] sol 330 58 
+it: 19 local [2, 3] sol 335 60 
+it: 19 local [2, 4] sol 337 61 
+it: 19 local [3, 4] sol 325 61 
+ over it 19 best loc [0]  sol 325 61 
+it: 20 local [1] sol 334 61 
+it: 20 local [2] sol 338 62 
+it: 20 local [3] sol 324 60 
+it: 20 local [4] sol 331 60 
+it: 20 local [0, 1] sol 341 62 
+it: 20 local [0, 2] sol 347 60 
+it: 20 local [0, 3] sol 343 61 
+it: 20 local [0, 4] sol 353 62 
+it: 20 local [1, 2] sol 339 58 
+it: 20 local [1, 3] sol 322 60 
+it: 20 local [1, 4] sol 334 60 
+it: 20 local [2, 3] sol 328 59 
+it: 20 local [2, 4] sol 331 61 
+it: 20 local [3, 4] sol 309 55 
+ over it 20 best loc [0, 4]  sol 309 55 
+it: 21 local [0] sol 353 63 
+it: 21 local [1] sol 325 61 
+it: 21 local [2] sol 331 60 
+it: 21 local [3] sol 323 58 
+it: 21 local [4] sol 327 58 
+it: 21 local [0, 1] sol 341 62 
+it: 21 local [0, 2] sol 347 60 
+it: 21 local [0, 3] sol 343 61 
+it: 21 local [1, 2] sol 324 57 
+it: 21 local [1, 3] sol 322 60 
+it: 21 local [1, 4] sol 330 58 
+it: 21 local [2, 3] sol 335 60 
+it: 21 local [2, 4] sol 337 61 
+it: 21 local [3, 4] sol 325 61 
+ over it 21 best loc [0]  sol 325 61 
+it: 22 local [1] sol 334 61 
+it: 22 local [2] sol 338 62 
+it: 22 local [3] sol 324 60 
+it: 22 local [4] sol 331 60 
+it: 22 local [0, 1] sol 341 62 
+it: 22 local [0, 2] sol 347 60 
+it: 22 local [0, 3] sol 343 61 
+it: 22 local [0, 4] sol 353 62 
+it: 22 local [1, 2] sol 339 58 
+it: 22 local [1, 3] sol 322 60 
+it: 22 local [1, 4] sol 334 60 
+it: 22 local [2, 3] sol 328 59 
+it: 22 local [2, 4] sol 331 61 
+it: 22 local [3, 4] sol 309 55 
+ over it 22 best loc [0, 4]  sol 309 55 
+it: 23 local [0] sol 353 63 
+it: 23 local [1] sol 325 61 
+it: 23 local [2] sol 331 60 
+it: 23 local [3] sol 323 58 
+it: 23 local [4] sol 327 58 
+it: 23 local [0, 1] sol 341 62 
+it: 23 local [0, 2] sol 347 60 
+it: 23 local [0, 3] sol 343 61 
+it: 23 local [1, 2] sol 324 57 
+it: 23 local [1, 3] sol 322 60 
+it: 23 local [1, 4] sol 330 58 
+it: 23 local [2, 3] sol 335 60 
+it: 23 local [2, 4] sol 337 61 
+it: 23 local [3, 4] sol 325 61 
+ over it 23 best loc [0]  sol 325 61 
+it: 24 local [1] sol 334 61 
+it: 24 local [2] sol 338 62 
+it: 24 local [3] sol 324 60 
+it: 24 local [4] sol 331 60 
+it: 24 local [0, 1] sol 341 62 
+it: 24 local [0, 2] sol 347 60 
+it: 24 local [0, 3] sol 343 61 
+it: 24 local [0, 4] sol 353 62 
+it: 24 local [1, 2] sol 339 58 
+it: 24 local [1, 3] sol 322 60 
+it: 24 local [1, 4] sol 334 60 
+it: 24 local [2, 3] sol 328 59 
+it: 24 local [2, 4] sol 331 61 
+it: 24 local [3, 4] sol 309 55 
+ over it 24 best loc [0, 4]  sol 309 55 

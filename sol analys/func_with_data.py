@@ -270,19 +270,15 @@ def get_objVal(data, first_path_sol, second_path_sol):
 
     return objVal
 
-def JSON_import( first_path_sol ):
+def JSON_import( groups, name = "solution" ):
 
 
-    groups = first_path_sol['groups'] 
-
-    print(type(groups[0][2]))
+  
 
     list_gr = []
 
     for gr in groups:
         
-        if gr[5] == False:
-            continue
         g = []
         g.append(gr[0])
         g.append(int(gr[1]))
@@ -291,9 +287,9 @@ def JSON_import( first_path_sol ):
         g.append(int(gr[2]))
         g.append( d_1)
         g.append( d_2)
-        g.append(int(gr[6]))
+        g.append(int(gr[5]))
         list_gr.append(g)
 
 
-    with open('sol.json','w') as file:
+    with open(name,'w') as file:
         json.dump(list_gr, file, indent= 3)

@@ -29,25 +29,25 @@ def read_data(name = None, i = 0):
     fileOrders.close()
 
     data = {}
-    # data['J'] = 500# num of studetns
-    # data['L'] = 13# num of course
-    # data['I'] = 5# num of teachers
-    # data['r'] = 4# num of rooms
-    # data['D'] = 6# num of day
-    # data['T'] = 11# num of timslots in the 
-    # data['minNumber'] = 2# min number of students in the group
-    # data['maxNumber'] = 8# max number of students in the group
-    # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
-    
-    data['J'] = 150
-    data['L'] = 3
+    data['J'] = 500# num of studetns
+    data['L'] = 13# num of course
+    data['I'] = 5# num of teachers
+    data['r'] = 4# num of rooms
     data['D'] = 6# num of day
     data['T'] = 11# num of timslots in the 
-    data['I'] = 3# num of teachers
-    data['r'] = 2# num of rooms
     data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 6# max number of students in the group
-    data['timeLessons']  = np.array([ 4, 5, 6])
+    data['maxNumber'] = 8# max number of students in the group
+    data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
+    
+    # data['J'] = 150
+    # data['L'] = 3
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the 
+    # data['I'] = 3# num of teachers
+    # data['r'] = 2# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 6# max number of students in the group
+    # data['timeLessons']  = np.array([ 4, 5, 6])
 
     data['couple_of_Days'] =  get_list_of_couple_of_days(data['D'])
     
@@ -274,7 +274,7 @@ def get_objVal(data, first_path_sol, second_path_sol):
 
     return objVal
 
-def JSON_import( first_path_sol ):
+def JSON_import( first_path_sol , filename):
 
 
     groups = first_path_sol['groups'] 
@@ -298,5 +298,5 @@ def JSON_import( first_path_sol ):
         list_gr.append(g)
 
 
-    with open('sol.json','w') as file:
+    with open(filename,'w') as file:
         json.dump(list_gr, file, indent= 3)

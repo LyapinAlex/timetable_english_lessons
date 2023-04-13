@@ -21,7 +21,7 @@ def algorithm(i, locationParams = None, solutionsFromDB = None):
 
 
     # data = sort_data(locationParams, solutionsFromDB)
-    data = read_data(f"examples_copy\\orders_1_{i}.txt")
+    data = read_data(f"examples_copy\\orders_2_{i}.txt")
 
     Time = time.perf_counter()
     first_path_sol = base_group(data)
@@ -43,11 +43,11 @@ def algorithm(i, locationParams = None, solutionsFromDB = None):
     print(count_students(data, first_path_sol, second_path_sol), get_objVal(data, first_path_sol, second_path_sol))
     sol = get_solution( first_path_sol)
     # sol_export_gurobi(data, first_path_sol, second_path_sol)
-    JSON_import( first_path_sol )
+    JSON_import( first_path_sol, f"sol_{i}" )
     return sol
 
 if __name__ == "__main__":
 
-    algorithm(1)
-    # for i in range(1,11):
-        # algorithm(i)
+    # algorithm(1)
+    for i in range(6,11):
+        algorithm(i)
