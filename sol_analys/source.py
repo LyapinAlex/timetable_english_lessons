@@ -282,6 +282,7 @@ def get_sol(sol):
     return num_st, num_gr
 
 
+
 def launch():
     data = Data(J, L, I, T, D, r, minN, maxN, timeL )
 
@@ -304,15 +305,15 @@ def launch():
     # timetable_png("schedule2")
     # JSON_import(sol.groups, "sol_all")
 
-    for i in range(1, 2):
+    for i in range(1, 11):
         data = Data(J, L, I, T, D, r, minN, maxN, timeL )
         filename_data = f"examples_copy\\orders_2_{i}.txt"
         data.read_input(filename_data)
         filename_sol = f"sol_{i}.json"
         sol = Solution(filename_sol)
-        print(get_sol(sol))
-        sol = local_search(3, data, sol, i )
-        print(get_sol(sol))
+        print(get_sol(sol),f"start {i}")
+        sol = local_search(15, data, sol, i )
+        print(get_sol(sol),f"end {i}")
         JSON_import(sol.groups, f"local_prob_sol_{i}.json")
     
     
