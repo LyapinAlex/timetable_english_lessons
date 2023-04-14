@@ -18,7 +18,7 @@ def base_group(data, config = None):
 
 
     schedule = {
-        'students': np.zeros((data['J'])), 
+        'students': np.zeros((data['J']),dtype = np.int32), 
         'groups': [ [] for __ in range(data['L'])]
         }
    

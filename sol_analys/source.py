@@ -205,7 +205,6 @@ def local_search(num_it, data, sol, i):
 
 def rebuild_timetable(set_update_teachers,data, sol):
 
-    t = time.perf_counter()
     clear_group_teachers(set_update_teachers, sol)
     
     sol.rename_group()
@@ -213,31 +212,34 @@ def rebuild_timetable(set_update_teachers,data, sol):
     set_dont_get_students = get_list_comp(range(J), set_get_students)
 
     new_data = get_new_input_data(data, sol, set_update_teachers )
+    t = time.perf_counter()
     first_path_sol = base_group(new_data)
-    
+    print("first", time.perf_counter() - t)
     first_path_sol_copy = copy.deepcopy(first_path_sol)
+    time_2 = time.perf_counter()
     second_path_sol = base_schedule(new_data, first_path_sol_copy)
+    print("second", time.perf_counter() - time_2)
 
-    record = 0
-    for gr in first_path_sol_copy['groups']:
-        if gr[5] == False:
-            continue
-        record+=len(gr[0])
+    # record = 0
+    # for gr in first_path_sol_copy['groups']:
+    #     if gr[5] == False:
+    #         continue
+    #     record+=len(gr[0])
     
 
-    for __ in  range(10):
-        first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
-        second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
+    # for __ in  range(10):
+    #     first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
+    #     second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
 
-        rec = 0
-        for gr in first_path_sol_copy_2['groups']:
-            if gr[5] == False:
-                continue
-            rec+=len(gr[0])
+    #     rec = 0
+    #     for gr in first_path_sol_copy_2['groups']:
+    #         if gr[5] == False:
+    #             continue
+    #         rec+=len(gr[0])
 
-        if rec > record:
-            record = rec
-            first_path_sol_copy =  first_path_sol_copy_2
+    #     if rec > record:
+    #         record = rec
+    #         first_path_sol_copy =  first_path_sol_copy_2
 
 
     first_path_sol = first_path_sol_copy
@@ -286,18 +288,18 @@ def get_sol(sol):
 def launch():
     data = Data(J, L, I, T, D, r, minN, maxN, timeL )
 
- 
-    # filename_data = f"examples_copy\\orders_2_1.txt"
-    # data.read_input(filename_data)
+    # for i in range(1, 11):
+    #     filename_data = f"examples_copy\\orders_2_{i}.txt"
+    #     data.read_input(filename_data)
 
-    # filename_sol = f"sol_1.json"
-    # sol = Solution(filename_sol)
-    # t = time.perf_counter()
-    # print(get_sol(sol),"start") 
-    # # sol = local_search(1, data, sol, 1 )
-    # rebuild_timetable([1,3,2],data, sol)
-    # print(time.perf_counter() - t)
-    # print(get_sol(sol),"end")
+    #     filename_sol = f"sol_{i}.json"
+    #     sol = Solution(filename_sol)
+    #     t = time.perf_counter()
+    #     print(get_sol(sol),"start") 
+    #     # sol = local_search(1, data, sol, 1 )
+    #     rebuild_timetable([1,3,2],data, sol)
+    #     print(time.perf_counter() - t)
+    #     print(get_sol(sol),"end")
 
 
     # sol.rooms_distribution()

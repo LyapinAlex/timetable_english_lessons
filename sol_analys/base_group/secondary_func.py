@@ -84,7 +84,7 @@ def create_array_rec( data, time_begin_for_st, set_id_students):
     couple_days = data['couple_of_Days']
     numDays = len(data['couple_of_Days'])
     T = 4*data['T']
-    A = np.zeros((T, T, numDays))
+    A = np.zeros((T, T, numDays), dtype=np.int32)
     for j in set_id_students:
 
         list_time = time_begin_for_st[j]

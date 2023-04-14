@@ -13,7 +13,7 @@ def create_schedule(data, schedule):
     r = data['r']
     I = data['I']
 
-    number_working_rooms = copy.copy(data['number_working_rooms'] )
+    number_working_rooms = copy.copy(data['number_working_rooms'])
     for d in range(data['D']):
         for t in range(4*data['T']):
             number_working_rooms[d,t] = min(r - number_working_rooms[d,t], I)
@@ -51,11 +51,14 @@ def create_schedule(data, schedule):
         
         while cor >= minPerson:
             ind = False 
-            
+            max_rec = 0
             for t_1 in range(T):
                 for t_2 in range(T):
                     for i in np.arange(numDays):
                         days = couple_of_days[i]
+
+                        if array_data[t_1,t_2, i]> max_rec:
+                            max_rec = array_data[t_1,t_2, i]
 
                         if array_data[t_1,t_2, i] >= cor:
                             if check(t_1, t_2, timeL[l], number_working_rooms, days[0], days[1]):
@@ -69,10 +72,13 @@ def create_schedule(data, schedule):
                                     number_working_rooms[days[0], t_1 + t]-=1
                                     number_working_rooms[days[1], t_2 + t]-=1
                                 ind = True
-
+                            else: 
+                                array_data[t_1,t_2, i] = 0
 
             if ind == False:
                 cor -= 1
+                if cor > max_rec:
+                    cor= max_rec
 
 
     return None
