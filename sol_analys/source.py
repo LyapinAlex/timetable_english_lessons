@@ -191,7 +191,7 @@ def local_search(num_it, data, sol, i):
                 best_loc = loc
         sol = new_sol
         f.write(f" over it {it} best loc {best_loc}  sol {get_sol(new_sol)[0]} {get_sol(new_sol)[1]} \n")
-        if len(last_loc) == 3:
+        if len(last_loc) == 1:
             last_loc.pop(0)
         last_loc.append(best_loc)
         if get_sol(new_sol)[0] >best_val[0]:
@@ -214,37 +214,37 @@ def rebuild_timetable(set_update_teachers,data, sol):
     new_data = get_new_input_data(data, sol, set_update_teachers )
     t = time.perf_counter()
     first_path_sol = base_group(new_data)
-    print("first", time.perf_counter() - t)
+    # print("first", time.perf_counter() - t)
     first_path_sol_copy = copy.deepcopy(first_path_sol)
     time_2 = time.perf_counter()
     second_path_sol = base_schedule(new_data, first_path_sol_copy)
-    print("second", time.perf_counter() - time_2)
 
-    # record = 0
-    # for gr in first_path_sol_copy['groups']:
-    #     if gr[5] == False:
-    #         continue
-    #     record+=len(gr[0])
+    record = 0
+    for gr in first_path_sol_copy['groups']:
+        if gr[5] == False:
+            continue
+        record+=len(gr[0])
     
 
-    # for __ in  range(10):
-    #     first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
-    #     second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
+    for __ in  range(10):
+        first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
+        second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
 
-    #     rec = 0
-    #     for gr in first_path_sol_copy_2['groups']:
-    #         if gr[5] == False:
-    #             continue
-    #         rec+=len(gr[0])
+        rec = 0
+        for gr in first_path_sol_copy_2['groups']:
+            if gr[5] == False:
+                continue
+            rec+=len(gr[0])
 
-    #     if rec > record:
-    #         record = rec
-    #         first_path_sol_copy =  first_path_sol_copy_2
+        if rec > record:
+            record = rec
+            first_path_sol_copy =  first_path_sol_copy_2
 
 
     first_path_sol = first_path_sol_copy
 
 
+    # print("second", time.perf_counter() - time_2)
     # base_reconstruct(new_data, first_path_sol, second_path_sol)
 
 
