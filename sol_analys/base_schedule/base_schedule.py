@@ -15,6 +15,8 @@ def base_schedule(data, sol_1, config = None):
     'schedule_of_teachers': np.zeros((data['I'], data['D'], 4 * data['T']))}
 
     change_format_group(data, sol_1, config)
+    
+
 
     appointment(data, sol_1, schedule)
 

@@ -40,6 +40,8 @@ local_set = [[0],[1],[2],[3],[4],
              [0,1,2]]
 
 
+
+
 # def analys(data, sol):
 
 #     all_teachers_time = []
@@ -213,19 +215,39 @@ def rebuild_timetable(set_update_teachers,data, sol):
     new_data = get_new_input_data(data, sol, set_update_teachers )
     first_path_sol = base_group(new_data)
     
-    second_path_sol = base_schedule(new_data, first_path_sol)
+    first_path_sol_copy = copy.deepcopy(first_path_sol)
+    second_path_sol = base_schedule(new_data, first_path_sol_copy)
 
-    # for __ in  range(4):
-    #     first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
-    #     second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
+    record = 0
+    for gr in first_path_sol_copy['groups']:
+        if gr[5] == False:
+            continue
+        record+=len(gr[0])
+    
 
+    for __ in  range(10):
+        first_path_sol_copy_2 = copy.deepcopy(first_path_sol)
+        second_path_sol = base_schedule(new_data, first_path_sol_copy_2, config="rand")
+
+        rec = 0
+        for gr in first_path_sol_copy_2['groups']:
+            if gr[5] == False:
+                continue
+            rec+=len(gr[0])
+
+        if rec > record:
+            record = rec
+            first_path_sol_copy =  first_path_sol_copy_2
+
+
+    first_path_sol = first_path_sol_copy
 
 
     # base_reconstruct(new_data, first_path_sol, second_path_sol)
 
 
+
     groups = first_path_sol['groups'] 
-    
     for gr in groups:
         if gr[5] == False:
             continue
@@ -264,15 +286,17 @@ def launch():
     data = Data(J, L, I, T, D, r, minN, maxN, timeL )
 
  
-    # filename_data = f"examples_copy\\orders_2_6.txt"
+    # filename_data = f"examples_copy\\orders_2_1.txt"
     # data.read_input(filename_data)
 
-    # filename_sol = f"sol_6.json"
+    # filename_sol = f"sol_1.json"
     # sol = Solution(filename_sol)
-    # t = time.perf_counter() 
-    # sol = local_search(10, data, sol, 1 )
+    # t = time.perf_counter()
+    # print(get_sol(sol),"start") 
+    # # sol = local_search(1, data, sol, 1 )
+    # rebuild_timetable([1,3,2],data, sol)
     # print(time.perf_counter() - t)
-    # print(get_sol(sol))
+    # print(get_sol(sol),"end")
 
 
     # sol.rooms_distribution()
@@ -280,16 +304,16 @@ def launch():
     # timetable_png("schedule2")
     # JSON_import(sol.groups, "sol_all")
 
-    for i in range(1, 11):
+    for i in range(1, 2):
         data = Data(J, L, I, T, D, r, minN, maxN, timeL )
         filename_data = f"examples_copy\\orders_2_{i}.txt"
         data.read_input(filename_data)
         filename_sol = f"sol_{i}.json"
         sol = Solution(filename_sol)
         print(get_sol(sol))
-        sol = local_search(15, data, sol, i )
+        sol = local_search(3, data, sol, i )
         print(get_sol(sol))
-        JSON_import(sol.groups, f"rebuild_sol_{i}.json")
+        JSON_import(sol.groups, f"local_prob_sol_{i}.json")
     
     
 

@@ -27,10 +27,16 @@ def change_format_group(data, sol, config = None):
         
 
 
-    if config == None:
-        sorting( sort_group)
-    else:
-        shuffle(sort_group)
+    sorting( sort_group)
+
+
+    if config == "rand":
+        num_first = len(sort_group)//4
+        first_groups = sort_group[0:num_first]
+
+        shuffle(first_groups)
+        sort_group[0:num_first] = first_groups
+
     sol['groups'] = sort_group
 
     
@@ -42,8 +48,6 @@ def sorting(list):
     for k_1 in range(len(list)):
         for k_2 in range(len(list)):
 
-    # for k_1 in range(86):
-    #     for k_2 in range(86):
             a = list[k_1]
             b = list[k_2]
             a_v = len(a[0])*10000 + (44 - max(a[3][2] - a[3][1], a[4][2] - a[4][1]))*100 + (13 - a[2])
