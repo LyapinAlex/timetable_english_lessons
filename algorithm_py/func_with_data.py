@@ -242,15 +242,16 @@ def get_objVal(data, first_path_sol, second_path_sol):
 
     
     for gr in groups:
+        if gr[5] == False:
+            continue
         course_gr[gr[2]].append(1)
+        objVal+=len(gr[0])
 
     penalty = 0.0
-    
-   
+
     for l in range(data['L']):
-        penalty_l= 0.0
-        for i in course_gr[l]:
-            penalty_l+=i
+        penalty_l= len(course_gr[l])
+        # print(penalty_l, l)
 
         if l == 0 or l == 1 or l == 11 or l == 12:
             penalty_l-=1
@@ -259,18 +260,18 @@ def get_objVal(data, first_path_sol, second_path_sol):
             penalty_l-=3
 
         if l == 5 or l == 6 or l ==7:
-            penalty_l-=3
+            penalty_l-=5
 
-        if penalty_l <= 0:
-            break
-        else:
+        if penalty_l > 0:
             penalty+= 2.5*penalty_l
-
-    for j in first_path_sol['students']:
-        if  j != 0:
-            objVal+= 1
+        # print(penalty_l)
+    
+    # for j in first_path_sol['students']:
+    #     if  j != 0:
+    #         objVal+= 1
 
     objVal-=penalty
+
 
     return objVal
 
