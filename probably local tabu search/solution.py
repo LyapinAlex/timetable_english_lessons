@@ -10,7 +10,8 @@ class Solution:
     
     def __init__(self, filename ="sol"):
         """ иницализация решения и чтения его из JSON файла"""
-        
+
+       
         with open(filename + ".json",'r') as file:
             self.groups = json.load(file)
 
@@ -261,7 +262,7 @@ class Solution:
 
         objVal-=penalty
 
-        print(num_st, penalty)
+
 
         return {'num_st': num_st, 
                 'num_gr': num_gr, 
@@ -340,7 +341,7 @@ class Solution:
 
         return None
 
-    def check_sol(self, data):
+    def check_sol_math_model(self, data):
         
 
         # (2) Если студент в группе, то он может прийти, когда у этой группы занятие,
@@ -503,6 +504,174 @@ class Solution:
        
         return True
 
+    def check_sol_alg(self, data):
+        
+        taken_students = np.zeros(J)
+        create_groups = np.zeros((K,L))
+
+        groups = self.groups
+        for group in groups:
+            # (1) Все студенты имеет курc группы
+            list_st = group[0]
+            if type(list_st) is not list:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+
+            k = group[1]
+            if type(k) is not int:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            if  k < 1 or k > K:
+                raise f"ОШИБКА НОМЕРА ГРУППЫ" 
+
+            l = group[2]
+            if type(l) is not int:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            if  l < 0 or l >= L:
+                raise f"ОШИБКА КУРСА ГРУППЫ" 
+
+            if create_groups[k - 1, l ] == 1:
+                raise "ОШИБКА ГРУППЫ ОБЛАДАЮТ ОДНИМ НОМЕРОК К"
+            
+            create_groups[k - 1, l ] = 1
+
+            for j in list_st:
+                if type(j) is not int:
+                    raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+
+                if j < 0 or j >= J :
+
+                    raise f"ОШИБКА НЕВЕРНО ЗАДАН НОМЕР СТУДЕНТА"
+
+
+                if taken_students[j] == 1:
+                    raise f"ОШИБКА СТУДЕНТ {j} ЧИСЛИТЬСЯ В НЕСКОЛЬКИ ГРУППАХ"
+                else:
+                    taken_students[j]+=1
+
+
+       
+                if data.courseRec[j, l] == 0:
+                    raise f"ОШИБКА СТУДЕНТ В ГРУППЕ {k} {l} НЕ СВОЕГО КУРСА"
+
+            num_st = len(list_st)
+            if num_st < minN or num_st > maxN:
+                raise f"ОШИБКА ЧИСЛЕНОСТЬ ГРУППЫ {k} {l} НЕ ПОДХОДИТ НАЧАЛЬНЫМ УСЛОВИЯМ"
+            
+
+            first_day = group[3]
+            second_day = group[4]
+            if type(first_day) is not list or  type(second_day) is not list:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            if len(first_day) != 3 or len(second_day) != 3:          
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            for el in first_day:
+                if type(el) is not int:
+                    raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            for el in second_day:
+                if type(el) is not int:
+                    raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            if first_day[0] < 0 or first_day[0] >= D or second_day[0] < 0 or second_day[0] >= D:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            if first_day[1] < 0 or first_day[1] >= timeslotsInHour * T or second_day[1] < 0 or second_day[1] >= timeslotsInHour * T:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+            if first_day[2] < 0 or first_day[2] >= timeslotsInHour * T or second_day[2] < 0 or second_day[2] >= timeslotsInHour * T:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+
+            if  abs(first_day[0] - second_day[0]) <= 1:
+                raise f"ОШИБКА С РАБОЧИМИ ДНЯМИ ГРУППЫ {k} {l}"
+
+
+
+            
+            for j in list_st:
+                for t_1 in range(first_day[1], first_day[2] + 1):
+                    if data.timeRec[j, first_day[0], t_1] == 0:
+                        raise f"ОШИБКА СТУДЕНТ {j} НЕ МОЖЕТ ЗАНИМАТЬСЯ  С ГРУППОЙ {k} {l}"
+                    
+
+                for t_2 in range(second_day[1], second_day[2] + 1):
+                    if data.timeRec[j, second_day[0], t_2] == 0:
+                        raise f"ОШИБКА СТУДЕНТ {j} НЕ МОЖЕТ ЗАНИМАТЬСЯ  С ГРУППОЙ {k} {l}"
+                    
+
+            if first_day[2] + 1 - first_day[1] != data.timeL[l] or second_day[2] + 1 - second_day[1] != data.timeL[l]:
+                raise f"ОШИБКА ГРУППА {k} {l} ОБЛАДАЕТ НЕВЕРНОЙ ПРОДОЛЖИТЕЛЬНОСТЬ"
+
+            if type(group[5]) is not int:
+                raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
+
+            if not group[5] in range(I):
+                raise f"ОШИБКА ГРУППЕ {k} {l} НЕПРАВИЛЬНО НАЗНАЧЕН ПРЕПОДАВАТЕЛЬ { group[5]}"
+            
+        teacher_worktimes = np.zeros((I, K, L, D, timeslotsInHour * T ))
+
+        for group in groups:
+            k = group[1]
+            l = group[2]
+            teacher = group[5] 
+            first_day = group[3]
+            second_day = group[4]
+            for t_1 in range(first_day[1], first_day[2] + 1):
+                teacher_worktimes[teacher, k, l, first_day[0], t_1]+=1
+            for t_2 in range(second_day[1], second_day[2] + 1):
+                teacher_worktimes[teacher, k, l, second_day[0], t_2]+=1
+
+        max_room = 0
+        for d in range(D):
+            for t in range(timeslotsInHour * T):
+                room_used = np.sum(teacher_worktimes[:, :, :, d, t])
+                if room_used > max_room:
+                    max_room = room_used
+  
+        if max_room > r:
+            raise f"ОШИБКА РЕШЕНИЮ ТРЕБУЕТСЯ {max_room} КОМНАТ. У ШКОЛЫ ВСЕГО {r} КОМНАТ"
+        
+    
+
+
+        for i in range(I):
+            for d in range(D):
+                for t in range(timeslotsInHour * T):
+                    if np.sum(teacher_worktimes[i, :, :, d, t]) > 1:
+                        raise f"ОШИБКА ПРЕПОДАВАТЕЛЬ {i} В ДЕНЬ {d} И ВРЕМЯ {t} РАБОТАЕТ С НЕСКОЛЬКИМИ ГРУППАМИ"
+
+        for i in range(I):
+            num_work_days = 0
+            for d in range(D):
+                if np.sum(teacher_worktimes[i, :, :, d, :]) > 0:
+                    num_work_days+=1
+            if num_work_days > D - 1:
+                raise f"ОШИБКА ПРЕПОДАВАТЕЛЬ {i} НЕ ИМЕЕТ ВЫХОДНОГО"
+        
+        for i in range(I):
+            for d in range(D):
+                t_start = timeslotsInHour * T
+                t_finish = 0
+                for t in range(timeslotsInHour * T):
+                    if np.sum(teacher_worktimes[i, :, :, d, t]) > 0:
+                        t_start = t
+                        break
+                
+                for t in range(timeslotsInHour * T - 1, -1, -1):
+                    if np.sum(teacher_worktimes[i, :, :, d, t]) > 0:
+                        t_finish = t
+                        break
+                
+                if t_finish - t_start + 1 > teacherLimit:
+                    raise f"ОШИБКА ПРЕПОДАВАТЕЛЬ {i} В ДЕНЬ {d} ПЕРЕРАБАТЫВАЕТ СВОИ ЧАСЫ"
+
+
+        for group in groups:
+            teacher = group[5] 
+            first_day = group[3]
+            second_day = group[4]
+
+            if first_day[1]  != 0 and np.sum(teacher_worktimes[teacher, :, :, first_day[0], first_day[1] - 1]) > 0:
+                raise f"ОШИБКА ПРЕПОДАВАТЕЛЬ {i} В ДЕНЬ {d} НЕ ОТДЫХАЕТ МЕЖДУ ПАРАМИ"
+
+            if second_day[1]  != 0 and np.sum(teacher_worktimes[teacher, :, :, second_day[0], second_day[1] - 1]) > 0:
+                raise f"ОШИБКА ПРЕПОДАВАТЕЛЬ {i} В ДЕНЬ {d} НЕ ОТДЫХАЕТ МЕЖДУ ПАРАМИ"
+
+        return True
 
 # Неиспользуемые функции
     def analysis(self, data, J):

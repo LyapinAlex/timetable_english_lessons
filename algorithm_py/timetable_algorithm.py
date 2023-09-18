@@ -25,22 +25,13 @@ def algorithm(i, locationParams = None, solutionsFromDB = None):
 
     Time = time.perf_counter()
     first_path_sol = base_group(data)
+    print(first_path_sol['groups'])
     second_path_sol = base_schedule(data, first_path_sol)
     Time = time.perf_counter() - Time 
 
-    # base_reconstruct(data, first_path_sol, second_path_sol)
-    print_schedule(data, first_path_sol, second_path_sol, i)
-
-    
-    f=open(f"sol_alg_{i}.txt","w")
-    f.write("sol = ")
-    f.write(str(count_students(data, first_path_sol, second_path_sol)))
-    f.write("\nobjVal = ")
-    f.write(str(get_objVal(data, first_path_sol, second_path_sol)))
-    f.close()
 
 
-    print(count_students(data, first_path_sol, second_path_sol), get_objVal(data, first_path_sol, second_path_sol))
+    # print(count_students(data, first_path_sol, second_path_sol), get_objVal(data, first_path_sol, second_path_sol))
     sol = get_solution( first_path_sol)
     # sol_export_gurobi(data, first_path_sol, second_path_sol)
     # JSON_import( first_path_sol, f"sol_{i}" )
@@ -48,6 +39,6 @@ def algorithm(i, locationParams = None, solutionsFromDB = None):
 
 if __name__ == "__main__":
 
-    # algorithm(1)
-    for i in range(1,11):
-        algorithm(i)
+    algorithm(1)
+    # for i in range(1,11):
+    #     algorithm(i)
