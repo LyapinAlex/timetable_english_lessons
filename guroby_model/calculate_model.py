@@ -5,6 +5,8 @@ from gurobipy import GRB
 import time
 import json
 from tabulate import tabulate
+from model_schedule import *
+
 
 # data = {}
 # data['J'] = 500# num of studetns
@@ -89,15 +91,15 @@ def read_data(name = None, i = 0):
     fileOrders.close()
 
     data = {}
-    data['J'] = 500# num of studetns
-    data['L'] = 13# num of course
-    data['D'] = 6# num of day
-    data['T'] = 11# num of timslots in the day
-    data['I'] = 5# num of teachers
-    data['r'] = 4# num of rooms
-    data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 8# max number of students in the group
-    data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
+    # data['J'] = 500# num of studetns
+    # data['L'] = 13# num of course
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the day
+    # data['I'] = 5# num of teachers
+    # data['r'] = 4# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 8# max number of students in the group
+    # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
     data['K'] = 10
     # data['J'] = 150
     # data['L'] = 3
@@ -108,6 +110,17 @@ def read_data(name = None, i = 0):
     # data['minNumber'] = 2# min number of students in the group
     # data['maxNumber'] = 6# max number of students in the group
     # data['timeLessons']  = np.array([ 4, 5, 6])
+
+       
+    data['J'] = 300# num of studetns
+    data['L'] = 4# num of course
+    data['D'] = 6# num of day
+    data['T'] = 8# num of timslots in the day
+    data['I'] = 3# num of teachers
+    data['r'] = 2# num of rooms
+    data['minNumber'] = 2# min number of students in the group
+    data['maxNumber'] = 6# max number of students in the group
+    data['timeLessons']  = np.array([3, 4, 5 , 6])
 
 
     data['course_of_students'] = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((data['J'], data['L']))
@@ -268,7 +281,7 @@ def main(i_num, time):
     # file_name = f"sol_gurobi_ex_{i_num}_time_10800"
     sol = import_json_data(file_name)
 
-    data = read_data(f"examples_copy\\orders_2_{i_num}.txt")
+    data = read_data(f"examples_copy\\orders_3_{i_num}.txt")
     
     y = np.zeros( (data['J'], data['K']) )
     z = np.zeros( (data['K'], data['L']) )
@@ -282,64 +295,69 @@ def main(i_num, time):
     C = np.zeros( (data['I'], data['D'], timeslotsInHour * data['T']) )
     P = np.zeros( (data['I'], data['D']) )
 
-    for group in sol:
+    # for group in sol:
 
-        list_students = group[0]
-        k = group[1] - 1
-        l = group[2]
-        i = group[5]
-        d_1 =group[3]
-        d_2 = group[4]
+    #     list_students = group[0]
+    #     k = group[1] - 1
+    #     l = group[2]
+    #     i = group[5]
+    #     d_1 =group[3]
+    #     d_2 = group[4]
 
-        for j in list_students:
-            y[j,k] = 1 
+    #     for j in list_students:
+    #         y[j,k] = 1 
  
-        z[k,l] = 1
+    #     z[k,l] = 1
 
-        for t in range(timeslotsInHour * data['T']):
-            if t >= d_1[1]:
-                s[d_1[0], t , k, l] = 1
-            if t >= d_2[1]:
-                s[d_2[0], t , k, l] = 1
+    #     for t in range(timeslotsInHour * data['T']):
+    #         if t >= d_1[1]:
+    #             s[d_1[0], t , k, l] = 1
+    #         if t >= d_2[1]:
+    #             s[d_2[0], t , k, l] = 1
 
 
-        for t in range(timeslotsInHour * data['T']):
-            if t <= d_1[2]:
-                c[d_1[0], t , k, l] = 1
-            if t <= d_2[2]:
-                c[d_2[0], t , k, l] = 1
+    #     for t in range(timeslotsInHour * data['T']):
+    #         if t <= d_1[2]:
+    #             c[d_1[0], t , k, l] = 1
+    #         if t <= d_2[2]:
+    #             c[d_2[0], t , k, l] = 1
 
-        p[d_1[0], k, l] = 1
-        p[d_2[0], k, l] = 1
+    #     p[d_1[0], k, l] = 1
+    #     p[d_2[0], k, l] = 1
 
-        u[i, k, l] = 1
+    #     u[i, k, l] = 1
         
-        P[i,d_1[0]] = 1
-        P[i,d_2[0]] = 1
+    #     P[i,d_1[0]] = 1
+    #     P[i,d_2[0]] = 1
 
-        for t in range(timeslotsInHour * data['T']):
-            if c[d_1[0], t , k, l] + s[d_1[0], t , k, l] - p[d_1[0], k, l] == 1:
-                U[i,d_1[0], t, k, l] = 1
+    #     for t in range(timeslotsInHour * data['T']):
+    #         if c[d_1[0], t , k, l] + s[d_1[0], t , k, l] - p[d_1[0], k, l] == 1:
+    #             U[i,d_1[0], t, k, l] = 1
 
-            if c[d_2[0], t , k, l] + s[d_2[0], t , k, l] - p[d_2[0], k, l] == 1:
-                U[i,d_2[0], t, k, l] = 1
+    #         if c[d_2[0], t , k, l] + s[d_2[0], t , k, l] - p[d_2[0], k, l] == 1:
+    #             U[i,d_2[0], t, k, l] = 1
 
-        for t in range(timeslotsInHour * data['T']):
-            if t >= d_1[1]:
-                S[i, d_1[0], t] = 1
-            if t >= d_2[1]:
-                S[i, d_2[0], t] = 1
+    #     for t in range(timeslotsInHour * data['T']):
+    #         if t >= d_1[1]:
+    #             S[i, d_1[0], t] = 1
+    #         if t >= d_2[1]:
+    #             S[i, d_2[0], t] = 1
 
 
-        for t in range(timeslotsInHour * data['T']):
-            if t <= d_1[2]:
-                C[i, d_1[0], t] = 1
-            if t <= d_2[2]:
-                C[i, d_2[0], t] = 1 
+    #     for t in range(timeslotsInHour * data['T']):
+    #         if t <= d_1[2]:
+    #             C[i, d_1[0], t] = 1
+    #         if t <= d_2[2]:
+    #             C[i, d_2[0], t] = 1 
 
 
     # print(f'C:\cyrillic_characters\English_Lesson_I_{i}_K_10.lp')
-    model = gr.read(f'C:\cyrillic_characters\English_Lesson_I_{i_num}_K_10_ver1.1.lp')
+
+    # model_name = f'C:\cyrillic_characters\English_Lesson_I_{i_num}_K_10.lp'
+    model_name = f"English_Lesson_I_3_{i_num}_K_{10}_ver2.1.lp"
+    # model_name = f"English_Lesson_WT_tuning_{i_num}_K_{10}_ver1.0.lp"
+    model = gr.read(model_name)
+    # model.read(f"S_{i_num}_ver2.0.sol")
     # English_lesson_exp_4_time_600.sol
     # model = gr.read("C:\cyrillic_characters\English_lesson_exp_1_time_600.lp")
     model.update()
@@ -406,16 +424,22 @@ def main(i_num, time):
     #             model.getVarByName(f'S[{i},{d},{t}]').Start = int(S[i,d,t])
     #             model.getVarByName(f'C[{i},{d},{t}]').Start = int(C[i,d,t])
 
-    # model.update()
-    model.Params.logFile = f"consol_pure_sol_{i_num}_time_{time}_ver1.1.txt"
+
+
+    model.update()
+
+    model.Params.logFile = f"consol_sol_{i_num}_time_{time}_ver2.1.txt"
     model.params.TimeLimit = time
+    # model.setParam("Method", 2)
+    # model.setParam("MIPFocus", 1)
     model.update()
     # for l in range(5):
     #     # model.params.TimeLimit = 60*60
     #     # model.update()
     model.optimize()
-    groups = get_alg_sol(model, data)
-    import_JSON(groups, name = f"pure_sol_gurobi_ex_{i_num}_time_{time}_ver1.1")
+    model.write(f"S_{i_num}_ver2.1.sol")
+    # groups = get_alg_sol(model, data)
+    # import_JSON(groups, name = f"sol_gurobi_ex_{i_num}_time_{time}_ver1.2")
     # model.write(f"English_lesson_exp_{i_num}_time_{2*60*10}.lp")
 
 
@@ -426,11 +450,16 @@ def main(i_num, time):
 
 if __name__ == "__main__":
     
-    time_work = 60*60
-    for i in range(1, 6):
-        main(i, time_work)
-    time_work = 60*60*2
-    for i in range(1, 6):
-        main(i, time_work)
+    # time_work = 60*60*2
+    # for i in range(1, 6):
+    #     main(i, time_work)
+    # time_work = 60*60
+    # for i in range(1, 6):
+    #     main(i, time_work)
+
+    
+    for i in range(2, 11):
+        main(i, 3600)
+
 
     

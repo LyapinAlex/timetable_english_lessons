@@ -53,15 +53,15 @@ def read_data(name = None, i = 0):
     fileOrders.close()
 
     data = {}
-    data['J'] = 500# num of studetns
-    data['L'] = 13# num of course
-    data['D'] = 6# num of day
-    data['T'] = 11# num of timslots in the day
-    data['I'] = 5# num of teachers
-    data['r'] = 4# num of rooms
-    data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 8# max number of students in the group
-    data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
+    # data['J'] = 500# num of studetns
+    # data['L'] = 13# num of course
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the day
+    # data['I'] = 5# num of teachers
+    # data['r'] = 4# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 8# max number of students in the group
+    # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
     # data['J'] = 150
     # data['L'] = 3
     # data['D'] = 6# num of day
@@ -71,6 +71,28 @@ def read_data(name = None, i = 0):
     # data['minNumber'] = 2# min number of students in the group
     # data['maxNumber'] = 6# max number of students in the group
     # data['timeLessons']  = np.array([ 4, 5, 6])
+
+    # новая яразмерность
+   
+    # data['J'] = 300# num of studetns
+    # data['L'] = 4# num of course
+    # data['D'] = 6# num of day
+    # data['T'] = 8# num of timslots in the day
+    # data['I'] = 3# num of teachers
+    # data['r'] = 2# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 6# max number of students in the group
+    # data['timeLessons']  = np.array([3, 4, 5 , 6])
+    data['J'] = 300# num of studetns
+    data['L'] = 4# num of course
+    data['D'] = 6# num of day
+    data['T'] = 8# num of timslots in the day
+    data['I'] = 4# num of teachers
+    data['r'] = 3# num of rooms
+    data['minNumber'] = 2# min number of students in the group
+    data['maxNumber'] = 6# max number of students in the group
+    data['timeLessons']  = np.array([3, 4, 5 , 6])
+
 
 
     data['course_of_students'] = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((data['J'], data['L']))
@@ -103,58 +125,79 @@ def cb(model, where):
 # T = np.arange(0, 44, 1) # Множество временных слотов
 # I = np.arange(0, 3, 1) # Множество преподователь 
 # r = 2 # Количество комнат
-J = np.arange(0, 500, 1) # Заявки
-K = np.arange(0, 25, 1) # Количество групп
-L = np.arange(0, 13, 1) # Множество курсов
+# J = np.arange(0, 500, 1) # Заявки
+# K = np.arange(0, 25, 1) # Количество групп
+# L = np.arange(0, 13, 1) # Множество курсов
+# D = np.arange(0, 6, 1) # Рабочие дни
+# T = np.arange(0, 44, 1) # Множество временных слотов
+# I = np.arange(0, 5, 1) # Множество преподователь 
+# r = 4 # Количество комнат
+
+
+# новая яразмерность
+J = np.arange(0, 300, 1) # Заявки
+K = np.arange(0, 10, 1) # Количество групп
+L = np.arange(0, 4, 1) # Множество курсов
 D = np.arange(0, 6, 1) # Рабочие дни
-T = np.arange(0, 44, 1) # Множество временных слотов
-I = np.arange(0, 5, 1) # Множество преподователь 
-r = 4 # Количество комнат
+T = np.arange(0, 4*8, 1) # Множество временных слотов
+I = np.arange(0, 3, 1) # Множество преподователь 
+r = 2 # Количество комнат
+# I = np.arange(0, 4, 1) # Множество преподователь 
+# r = 3 # Количество комнат
+
+
 
 F = [] # Штрафы на создание каждой новой группы, созданно для борьбы с симметрией
-for i in range(0, 13):
-  F.append([])
-for i in K:
-  if ( i < 1):
-    F[0].append(0)
-    F[1].append(0)
-    F[12].append(0)
-    F[11].append(0)
-  else:
-    F[0].append(2.5)
-    F[1].append(2.5)
-    F[12].append(2.5)
-    F[11].append(2.5)
+# old penalty
+# for i in L:
+#   F.append([])
+# for i in K:
+#   if ( i < 1):
+#     F[0].append(0)
+#     F[1].append(0)
+#     F[12].append(0)
+#     F[11].append(0)
+#   else:
+#     F[0].append(2.5)
+#     F[1].append(2.5)
+#     F[12].append(2.5)
+#     F[11].append(2.5)
 
-for i in K:
-  if ( i < 3):
-    F[2].append(0)
-    F[3].append(0)
-    F[4].append(0)
-    F[8].append(0)
-    F[10].append(0)
-    F[9].append(0)
-  else:
-    F[2].append(2.5)
-    F[3].append(2.5)
-    F[10].append(2.5)
-    F[9].append(2.5)
-    F[4].append(2.5)
-    F[8].append(2.5)
+# for i in K:
+#   if ( i < 3):
+#     F[2].append(0)
+#     F[3].append(0)
+#     F[4].append(0)
+#     F[8].append(0)
+#     F[10].append(0)
+#     F[9].append(0)
+#   else:
+#     F[2].append(2.5)
+#     F[3].append(2.5)
+#     F[10].append(2.5)
+#     F[9].append(2.5)
+#     F[4].append(2.5)
+#     F[8].append(2.5)
 
-for i in K:
-  if ( i < 5):
-    F[5].append(0)
-    F[6].append(0)
-    F[7].append(0)
+# for i in K:
+#   if ( i < 5):
+#     F[5].append(0)
+#     F[6].append(0)
+#     F[7].append(0)
     
-  else:
-    F[5].append(2.5)
-    F[6].append(2.5)
-    F[7].append(2.5)
+#   else:
+#     F[5].append(2.5)
+#     F[6].append(2.5)
+#     F[7].append(2.5)
 
 
-F=np.array(F)
+
+
+# F=np.array(F)
+F = np.array([[0,0,0,2.5,2.5,2.5,2.5,2.5,2.5,2.5],
+              [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+              [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+              [0,0,0,2.5,2.5,2.5,2.5,2.5,2.5,2.5]])
 
 
 
@@ -165,12 +208,13 @@ class Problem:
         # str = f"C:/Users/Александр/source/vscode_project/Operation research/examples_copy/orders_2_{i}.txt"
         # f"examples_copy\\orders_hand_make.txt"
         # data = read_data("examples_copy\\orders_hm.txt")
-        data = read_data(f"examples_copy\\orders_2_{i}.txt")
+        data = read_data(f"examples_copy\\orders_3_{i}.txt")
         self.a =restruct(data['J'], data['D'], data['T'], data['L'], data['timeLessons'], data['timeslot_of_students'], data['course_of_students']  )
         self.b = data['course_of_students'] 
         self.lt = data['timeLessons']
         # Иницализация моедли
-        self.model = gr.Model("Schedule creating") 
+        # self.model = gr.Model("Schedule creating") 
+        self.model = gr.Model("Schedule without teachers") 
         self.model.Params.logFile = f"consol_info_{i}"
         # Переменые 
         # print(K)
@@ -220,12 +264,12 @@ class Problem:
         #(5.1) Ограничения на максимальное количество студентов в группе
         for k in K:
             for l in L:
-                self.model.addLConstr(gr.quicksum(self.y[j, k]*self.b[j, l] for j in J) <= 8)
+                self.model.addLConstr(gr.quicksum(self.y[j, k]*self.b[j, l] for j in J) <= data['maxNumber'] )
 
         #(5.2) Ограничения на минимальное количество студентов в группе
         for k in K:
             for l in L:
-                self.model.addLConstr(gr.quicksum(self.y[j, k]*self.b[j, l] for j in J) >= 2* self.z[k,l])
+                self.model.addLConstr(gr.quicksum(self.y[j, k]*self.b[j, l] for j in J) >= data['minNumber'] * self.z[k,l])
 
 
         #(6) Для любой группы в любой день количесво выделеных на нее таймслотов должно равняться продолжительности занятия
@@ -281,19 +325,19 @@ class Problem:
             for k in K:
                 self.model.addLConstr(gr.quicksum((self.u[i, k, l]) for i in I) == self.z[k,l])
 
-        #(14) Расписание преподавателя для каждой группы
+        # (14) Расписание преподавателя для каждой группы
         for i in I:
             for d in D:
                 for t in T:
                     for k in K:
                         for l in L:
-                            # self.model.addLConstr(self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])
-                            # self.model.addLConstr(self.U[i, d, t, k, l] <= self.u[i, k, l])
+                            self.model.addLConstr(self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])
+                            self.model.addLConstr(self.U[i, d, t, k, l] <= self.u[i, k, l])
                             self.model.addLConstr(self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l] + self.u[i, k, l] - self.U[i, d, t, k, l] <= 1)
 
         #(14.1) Расписание преподавателя для каждой группы
-        for i in I:
-            self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for d in D for t in T for k in K for l in L) <= 2*(gr.quicksum(self.lt[l] * self.u[i, k, l] for k in K for l in L)))
+        # for i in I:
+            # self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for d in D for t in T for k in K for l in L) <= 2*(gr.quicksum(self.lt[l] * self.u[i, k, l] for k in K for l in L)))
 
 
         #(15) Преподаватель в любой момент времени работает только с одной группой
@@ -312,18 +356,6 @@ class Problem:
                                 continue
                             self.model.addConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.c[d, t, k_1, l_1] +  self.s[d, t, k_1, l_1] - self.p[d, k_1, l_1] + 1 - self.U[i, d, t + 1, k_1, l_1] )
                             
-
-
-        # for i in I:
-        #     for d in D:
-        #         for t in T:
-        #             for k in K:
-        #                 for l in L:
-        #                     if t >= len(T) - self.lt[l] - 1:
-        #                         continue
-        #                     for k_1 in K:
-        #                         for l_1 in L:
-        #                             self.model.addConstr( self.U[i, d, t + 1, k, l]  - self.U[i, d, t, k, l] + self.U[i, d, t + self.lt[l] + 1, k_1, l_1] <= 1)
 
         #(17) Если у преподователя занимается группа в день d, то и он должен работать в этот день
         for i in I:
@@ -355,11 +387,12 @@ class Problem:
 
         for i in I:
             for d in D:
-                self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 32*self.P[i, d]))
+                self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 24*self.P[i, d]))
 
 
-        self.model.write(f"English_Lesson_I_{self.i}_K_{len(K)}_ver1.1.lp")
+        self.model.write(f"English_Lesson_I_3_{self.i}_K_{len(K)}_ver2.1.lp")  
 
+        # self.model.write(f"English_Lesson_WT_{self.i}_K_{len(K)}_ver1.1.lp")
         
 
     def calculate(self, time):
@@ -423,13 +456,28 @@ class Problem:
         f.close()
 
 
+def tuning_models(i_num):
+    # model_name = f'C:\cyrillic_characters\English_Lesson_WT_{i_num}_K_10_ver1.0.lp'
+    model_name = f"English_Lesson_WT_tuning_{i_num}_K_{10}_ver1.0.lp"
+    model = gr.read(model_name)
+    print(model.getParamInfo("Method"))
+    model.setParam("Method", 2)
+    model.setParam("MIPFocus", 3)
+    print(model.getParamInfo("Method"))
+
+    # model.tune()
+    # for i in range(model.tuneResultCount):
+    #     model.getTuneResult(i)
+    #     model.write(f'tune_m_{i_num}'+str(i)+'.prm')
+    #     break
+    # model.write(f"English_Lesson_WT_tuning_{i_num}_K_{10}_ver1.0.lp")
 
 
 def launch():
     i = 1 
-    for i in range(1,6):
+    for i in range(1,11):
         p = Problem(i, range(10))
-  
+        # tuning_models(i)
     # p.calculate(60*30)
 
 if __name__ == "__main__":

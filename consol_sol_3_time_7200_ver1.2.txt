@@ -1,0 +1,32 @@
+
+Gurobi 9.5.1 (win64) logging started Thu Sep  7 21:44:38 2023
+
+Set parameter LogFile to value "consol_sol_3_time_7200_ver1.2.txt"
+Set parameter TimeLimit to value 7200
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 892886 rows, 249470 columns and 25927914 nonzeros
+Model fingerprint: 0xa6acbd36
+Variable types: 0 continuous, 249470 integer (249470 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+01]
+  Objective range  [1e+00, 3e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 4e+01]
+
+Loaded user MIP start with objective 284.5
+
+Presolve removed 120000 rows and 0 columns (presolve time = 5s) ...
+Presolve removed 120000 rows and 0 columns (presolve time = 10s) ...
+Presolve removed 120000 rows and 0 columns (presolve time = 16s) ...
+Presolve removed 120000 rows and 0 columns
+Presolve time: 18.11s
+
+Explored 0 nodes (0 simplex iterations) in 19.15 seconds (19.47 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: 284.5 
+No other solutions better than 0
+
+Solve interrupted
+Best objective 2.845000000000e+02, best bound -, gap -
