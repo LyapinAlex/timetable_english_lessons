@@ -16,6 +16,8 @@ def base_schedule(data, sol_1):
 
     change_format_group(data, sol_1)
 
+    print(sol_1['groups'])
+
     appointment(data, sol_1, schedule)
 
     return schedule

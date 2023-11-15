@@ -26,6 +26,7 @@ import pdb
 import time
 import json
 import math
+import os
 
 
 local_set = [[0,1],[0,2],[0,3],[0,4],
@@ -245,20 +246,13 @@ def gradient_descent( data, sol, i):
 def rebuild_timetable(set_update_teachers,data, sol):
 
     clear_group_teachers(set_update_teachers, sol)
-    
+
+
     sol.recount_group()
     set_get_students = get_index_take_student(sol)
     set_dont_get_students = get_list_comp(range(J), set_get_students)
-
-
     new_data = get_new_input_data(data, sol, set_update_teachers )
-
-
     first_path_sol = base_group(new_data)
-
-    groups = first_path_sol['groups'] 
-
-
     base_schedule(new_data, first_path_sol)
     
 
@@ -293,45 +287,41 @@ def rebuild_timetable(set_update_teachers,data, sol):
 
 
 def launch():
-    prob_list = [[0.1, "01" ], [0.175, "0175" ], [0,25, "025"], [0.5, "05" ], [0.75, "075"], [0.825, "0825"], [0.9, "09" ]]
 
 
     data = Data(J, L, I, T , D, r, minN, maxN, timeL )
-
-    for i in range(1,11):
-        filename_data = f"examples_copy\\orders_2_{i}.txt"
-
-        data.read_input(filename_data)
-
-        filename_sol = f"sol_{i}"
-        sol = Solution(filename_sol)
-        print(sol.get_sol_val())
-        # print(rebuild_timetable(range(I),data, sol))
-        print(get_objVal(sol.groups))
-\
-        # print(data.timeRec[10][1])
-        # print(data.timeRec[10][5])
-        # if i == 6:
-            # sol.check_sol(data)
-        # return
-        # sol = local_search(15, p[0], data, sol,  name = f"histity_{i}_{j}" )
-        # sol.import_JSON(f"sol_{i}")
     
-    # i = 1
-    # for i in range(1,5 + 1):
-    #     for p in prob_list:
-    #         for j in range(3, 6):
-    #             filename_data = f"examples_copy\\orders_2_{i}.txt"
+    i = 0
+    sum_objval = 0
+    obj_val_array = np.zeros((10))
+    # path = "C:/Users/sasha/OneDrive/Рабочий стол/english lessons/model/sol model"
+    path = "C:/Users/sasha/OneDrive/Рабочий стол/english lessons/model/gurobi model ver 1.1"
+    sr = 0
 
-    #             data.read_input(filename_data)
+    for i in range(1,6):
+        filename_data = f"examples_copy\\orders_2_{i}.txt"
+        data.read_input(filename_data)
+        # filename_sol = f"sol_{i}"
+        filename_sol = f"sol_gurobi_ex_{i}_time_3600_ver1.1"
+        sol = Solution( os.path.join(path, filename_sol))
 
-    #             filename_sol = f"sol_{i}"
-    #             sol = Solution(filename_sol)
-    #             sol = local_search(15, p[0], data, sol,  name = f"histity_{i}_{j}" )
-    #             sol.import_JSON(f"sol_check__p_{p[1]}_loc_{i}_{j}")
-    #             print(f"        experiment {j} compled")
-    #         print(f"    prob {p[0]} compled")
-    #     print(f"{i} compled")
+        print(sol.get_sol_val())
+        sr+=sol.get_sol_val()['obj_val']
+    print(sr/5)
+    sr = 0
+    for i in range(1,6):
+        filename_data = f"examples_copy\\orders_2_{i}.txt"
+        data.read_input(filename_data)
+        # filename_sol = f"sol_{i}"
+        filename_sol = f"sol_gurobi_ex_{i}_time_7200_ver1.1"
+        sol = Solution( os.path.join(path, filename_sol))
+
+        print(sol.get_sol_val())
+        sr+=sol.get_sol_val()['obj_val']
+    print(sr/5)
+
+    # get_num_var_and_constr()
+
 
     return
 
@@ -339,6 +329,8 @@ def launch():
     
 
 def get_num_var_and_constr():
+
+    K = 10
 
     sum_var = int(0)
     var = 0
@@ -378,7 +370,12 @@ def get_num_var_and_constr():
     sum_constr+=K * L
     sum_constr+=timeslotsInHour * T * D * K * L
     sum_constr+=timeslotsInHour * T * D * K * L
-    sum_constr+=I * D * timeslotsInHour * T * K * L * 3
+    
+    sum_constr+=I * D * timeslotsInHour * T * K * L 
+    sum_constr+=I
+
+#    sum_constr+=I * D * timeslotsInHour * T * K * L * 3
+
     sum_constr+=I * D * timeslotsInHour * T               
     sum_constr+=I * D * timeslotsInHour * T    
     sum_constr+=I * D * timeslotsInHour * T * K * L 
@@ -452,7 +449,8 @@ def get_num_var_and_constr():
     num_cons += 1
 
     #(14) Расписание преподавателя для каждой группы
-    cons = I * D * timeslotsInHour * T * K * L * 3
+    # cons = I * D * timeslotsInHour * T * K * L * 3
+    cons = I * D * timeslotsInHour * T * K * L  +  I
     print(f"{num_cons}: sum_constr ={ cons}, \u03C9 = {round(cons / sum_constr * 100, 3)} %")
     num_cons += 1
 
@@ -505,5 +503,6 @@ def get_num_var_and_constr():
 
 
 if __name__ == '__main__':
+    # get_num_var_and_constr()
     # get_num_var_and_constr()
     launch()

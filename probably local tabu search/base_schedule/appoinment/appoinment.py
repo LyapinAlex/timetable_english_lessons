@@ -23,7 +23,7 @@ def appointment(data, sol_1, schedule):
     
 
 
-    # blank_groups = [0 for l in range(L)]
+    # blank_groups = [0 for __ in range(L)]
     # next_group = get_next_group(groups_course, blank_groups)
 
     # while(next_group != None):
@@ -31,8 +31,7 @@ def appointment(data, sol_1, schedule):
         # group = get_next_group(groups_course, blank_groups)
         # groups_course[group[2]].pop(0)
         # next_group = get_next_group(groups_course, blank_groups)
-        # print(group)
-        # Time = time.perf_counter() 
+
         appropriate_times = []
 
         first_day = group[3]
@@ -148,8 +147,9 @@ def greatest(a, b):
                 return False
 
             else:
-                a_2 = T * timeslotsInHour - max(a[3][2] - a[3][1], a[4][2] - a[4][1])
-                b_2 = T * timeslotsInHour - max(b[3][2] - b[3][1], b[4][2] - b[4][1])
+
+                a_2 = T * timeslotsInHour - max(a[3][2] + 1 - timeL[a[2]] + 1 - a[3][1], a[4][2] + 1 - timeL[a[2]] + 1 - a[4][1])
+                b_2 = T * timeslotsInHour - max(b[3][2] + 1 - timeL[b[2]] + 1 - b[3][1], b[4][2] + 1 - timeL[b[2]] + 1 - b[4][1])
                 if a_2 > b_2:
                     return True
                 if a_2 < b_2:
@@ -179,13 +179,21 @@ def get_next_group(groups_course, blank_groups):
             list_choosen_group.append([])
             list_cost.append(float('-inf'))
 
-  
-    max_gr = None
+    
     max_value = 0
     for l in range(L):
         if list_cost[l] > max_value:
             max_value = list_cost[l]
-            max_gr = list_choosen_group[l]
-
   
-    return max_gr
+
+    list_max_gr = []
+    for group in list_choosen_group:
+        if group == []:
+            continue
+        if list_cost[group[2]] == max_value:
+            list_max_gr.append(group)
+
+    sorting_new(list_max_gr)
+    
+    group = list_max_gr[0] if list_max_gr != [] else None
+    return group
