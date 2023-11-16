@@ -76,14 +76,16 @@ def expand_timeslots(data, group):
             ind_1 = False
             board_expand_time_first[0] = time * 4
         elif  expand_time_first_day[time] == 0 and not ind_1:
-            board_expand_time_first[1] = (time - 1) * 4
+            # board_expand_time_first[1] = (time - 1) * 4
+            board_expand_time_first[1] = time * 4
             ind_1 = True
 
         if expand_time_second_day[time] == 1 and ind_2:
             ind_2 = False
             board_expand_time_second[0] = time * 4
         elif  expand_time_second_day[time] == 0 and not ind_2:
-            board_expand_time_second[1] = (time - 1) * 4
+            # board_expand_time_second[1] = (time - 1) * 4
+            board_expand_time_second[1] = time * 4
             ind_2 = True
             
 

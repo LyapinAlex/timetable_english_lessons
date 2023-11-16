@@ -16,21 +16,21 @@ def appointment(data, sol_1, schedule):
 
     sorting_new(groups)
 
-    # groups_course = sort_course_group(groups)
+    groups_course = sort_course_group(groups)
 
-    # for list_groups_course in groups_course:
-    #     sorting_new(list_groups_course)
+    for list_groups_course in groups_course:
+        sorting_new(list_groups_course)
     
 
 
-    # blank_groups = [0 for __ in range(L)]
-    # next_group = get_next_group(groups_course, blank_groups)
+    blank_groups = [0 for __ in range(L)]
+    next_group = get_next_group(groups_course, blank_groups)
 
-    # while(next_group != None):
-    for group in groups:
-        # group = get_next_group(groups_course, blank_groups)
-        # groups_course[group[2]].pop(0)
-        # next_group = get_next_group(groups_course, blank_groups)
+    while(next_group != None):
+    # for group in groups:
+        group = get_next_group(groups_course, blank_groups)
+        groups_course[group[2]].pop(0)
+        next_group = get_next_group(groups_course, blank_groups)
 
         appropriate_times = []
 
@@ -87,7 +87,7 @@ def appointment(data, sol_1, schedule):
             # print("Sucsecc ", "l",group[2],"k", group[1])
 
             add_group_in_timetable(group, appropriate_times, data, schedule)
-            # blank_groups[group[2]] += 1
+            blank_groups[group[2]] += 1
 
     return None
 

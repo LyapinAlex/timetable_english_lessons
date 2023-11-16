@@ -14,7 +14,6 @@ def change_format_group(data, sol, config = None):
 
     groups = sol['groups']
 
-
     sort_group = []
     for course_group in groups:
         for group in course_group:
@@ -62,11 +61,13 @@ def sorting(list):
 
 def expand_timeslots(data, group):
 
+
     timeslot_of_students = data['timeslot_of_students']
     students = group[0]
     days = group[3]
     expand_time_first_day = np.ones(4*data['T'], dtype = np.int8)
     expand_time_second_day = np.ones(4*data['T'], dtype = np.int8)
+
     for student in students:
         for time in range(4*data['T']):
             expand_time_first_day[time] *= timeslot_of_students[student, days[0], time] 
