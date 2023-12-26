@@ -1,5 +1,6 @@
 import numpy as np
 import json
+from params  import *
 from tabulate import tabulate
 
 # def sol_export_gurobi(data, first_path_sol, second_path_sol):
@@ -29,25 +30,20 @@ def read_data(name = None, i = 0):
     fileOrders.close()
 
     data = {}
-    data['J'] = 500# num of studetns
-    data['L'] = 13# num of course
-    data['I'] = 5# num of teachers
-    data['r'] = 4# num of rooms
-    data['D'] = 6# num of day
-    data['T'] = 11# num of timslots in the 
-    data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 8# max number of students in the group
-    data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
     
-    # data['J'] = 150
-    # data['L'] = 3
-    # data['D'] = 6# num of day
-    # data['T'] = 11# num of timslots in the 
-    # data['I'] = 3# num of teachers
-    # data['r'] = 2# num of rooms
-    # data['minNumber'] = 2# min number of students in the group
-    # data['maxNumber'] = 6# max number of students in the group
-    # data['timeLessons']  = np.array([ 4, 5, 6])
+     
+    data['J'] = J# num of studetns
+    data['L'] = L# num of course
+    data['I'] = I# num of teachers
+    data['r'] = r# num of rooms
+    data['D'] = D# num of day
+    data['T'] = T# num of timslots in the 
+    data['minNumber'] = minN# min number of students in the group
+    data['maxNumber'] = maxN# max number of students in the group
+    data['timeLessons']  = timeL
+    data['num_div'] = timeslotsInHour
+    
+
 
     data['couple_of_Days'] =  get_list_of_couple_of_days(data['D'])
     
@@ -234,46 +230,44 @@ def sort_data(locationParams, solutionsFromDB):
     return data
 
 def get_objVal(data, first_path_sol, second_path_sol):
-    course_gr = [[] for __ in range(data['L'])]
-
-    objVal = 0.0
-
+    
     groups = first_path_sol["groups"]
+    
+    num_st = 0
+    num_gr = 0
+    for gr in groups:
+        if gr[5] == True:
+            num_gr+=1
+    for gr in groups:
+        if gr[5] == True:
+        
+            num_st+=len(gr[0])
 
+
+    course_gr = [[] for __ in range(L)]
+
+    objVal = num_st
+    
     
     for gr in groups:
-        if gr[5] == False:
-            continue
-        course_gr[gr[2]].append(1)
-        objVal+=len(gr[0])
+        if gr[5] == True:
+            course_gr[gr[2]].append(1)
+
 
     penalty = 0.0
 
-    for l in range(data['L']):
+    for l in range(L):
         penalty_l= len(course_gr[l])
-        # print(penalty_l, l)
+        penalty+= np.sum(F[l,k] for k in range(penalty_l))
 
-        if l == 0 or l == 1 or l == 11 or l == 12:
-            penalty_l-=1
-
-        if l == 2 or l == 3 or l == 4 or l == 8 or l == 9 or l == 10:
-            penalty_l-=3
-
-        if l == 5 or l == 6 or l ==7:
-            penalty_l-=5
-
-        if penalty_l > 0:
-            penalty+= 2.5*penalty_l
-        # print(penalty_l)
-    
-    # for j in first_path_sol['students']:
-    #     if  j != 0:
-    #         objVal+= 1
 
     objVal-=penalty
 
 
-    return objVal
+
+    return {'num_st': num_st, 
+            'num_gr': num_gr, 
+            'obj_val': objVal}
 
 def JSON_import( first_path_sol , filename):
 

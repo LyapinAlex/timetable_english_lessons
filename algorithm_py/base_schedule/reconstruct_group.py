@@ -1,4 +1,5 @@
 import numpy as np
+from params import *
 import copy
 
 def change_format_group(data, sol):
@@ -13,27 +14,42 @@ def change_format_group(data, sol):
 
     groups = sol['groups']
 
-
-    sort_group = []
+  
+    
     for course_group in groups:
+       
         for group in course_group:
-            sort_group.append(group)
+            expand_timeslots(data, group)
 
 
-    for group in sort_group:
-        expand_timeslots(data, group)
+    for course_group in groups:
+     
+        sorting_groups(course_group)
+        
+        
+
+    # sort_group = []
+    # for course_group in groups:
+    #     for group in course_group:
+    #         sort_group.append(group)
 
 
+    # for group in sort_group:
+    #     expand_timeslots(data, group)
+    # for course_group in groups:
+    #     for group in course_group:
+    #         expand_timeslots(data, group)
     # Эвристиска для порядка групп
     # sort_group.sort(key = lambda x : len(x[0])*10000 + (44 - max(x[3][2] - x[3][1], x[4][2] - x[4][1]))*100 + (13 - x[2]))
     # sort_group.sort(key = lambda x : len(x[0]))
-    sorting( sort_group)
-    # sort_group.reverse()
-    sol['groups'] = sort_group
+    # sorting( sort_group)
+    # # sort_group.reverse()
+    # sol['groups'] = sort_group
 
     
 
-    return sort_group
+    # return sort_group
+    return None
 
 def sorting(list):
 
@@ -74,26 +90,26 @@ def expand_timeslots(data, group):
 
         if expand_time_first_day[time] == 1 and ind_1:
             ind_1 = False
-            board_expand_time_first[0] = time * 4
+            board_expand_time_first[0] = time * data['num_div']
         elif  expand_time_first_day[time] == 0 and not ind_1:
             # board_expand_time_first[1] = (time - 1) * 4
-            board_expand_time_first[1] = time * 4
+            board_expand_time_first[1] = time * data['num_div']
             ind_1 = True
 
         if expand_time_second_day[time] == 1 and ind_2:
             ind_2 = False
-            board_expand_time_second[0] = time * 4
+            board_expand_time_second[0] = time * data['num_div']
         elif  expand_time_second_day[time] == 0 and not ind_2:
             # board_expand_time_second[1] = (time - 1) * 4
-            board_expand_time_second[1] = time * 4
+            board_expand_time_second[1] = time * data['num_div']
             ind_2 = True
             
 
     if board_expand_time_first[1] == None:
-        board_expand_time_first[1] = data['T'] * 4
+        board_expand_time_first[1] = data['T'] * data['num_div']
  
     if board_expand_time_second[1] == None:
-        board_expand_time_second[1] = data['T'] * 4
+        board_expand_time_second[1] = data['T'] * data['num_div']
 
     group.pop()
     group.pop()
@@ -106,3 +122,48 @@ def expand_timeslots(data, group):
 
     return group
 
+
+def sorting_groups(list):
+
+    for k_1 in range(len(list)):
+        for k_2 in range(len(list)):
+
+            a = list[k_1]
+            b = list[k_2]
+
+
+            if greatest(a, b):
+                c = a
+                list[k_1] = b
+                list[k_2] = c
+
+
+def greatest(a, b):
+    if b == []:
+        return True
+    else:
+        if a == []:
+            return False
+        else:
+            if len(a[0]) >  len(b[0]):
+                return True
+            if len(a[0]) <  len(b[0]):
+                return False
+
+            else:
+
+                a_2 = T * timeslotsInHour - max(a[3][2] + 1 - timeL[a[2]] + 1 - a[3][1], a[4][2] + 1 - timeL[a[2]] + 1 - a[4][1])
+                b_2 = T * timeslotsInHour - max(b[3][2] + 1 - timeL[b[2]] + 1 - b[3][1], b[4][2] + 1 - timeL[b[2]] + 1 - b[4][1])
+                if a_2 > b_2:
+                    return True
+                if a_2 < b_2:
+                    return False        
+
+
+                else:
+                    a_3 = L - a[2]
+                    b_3 = L - b[2]
+                    if a_3 > b_3:
+                        return True
+                    else:
+                        return False

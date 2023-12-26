@@ -69,14 +69,34 @@ class Data:
         
         print(num_st_of_course)
 
-        print(num_gr_of_course)
-            
-            
-        # p.sum([[0, 1], [0, 5]], axis=0)
+
     
     def school_power(self):
         
         return self.D * self.r * teacherLimit 
+    
+    def get_dict_form(self):
+        
+        
+        new_data = {}
+        new_data['J'] = J
+        new_data['L'] = L
+        new_data['D'] = D# num of day
+        new_data['T'] = T# num of timslots in the 
+        new_data['I'] = I# num of teachers
+        new_data['r'] = r # num of rooms
+        new_data['number_working_rooms'] = r # num of rooms
+        new_data['minNumber'] = minN# min number of students in the group
+        new_data['maxNumber'] = maxN# max number of students in the group
+        new_data['timeLessons']  = timeL 
+
+        new_data['couple_of_Days'] =  get_list_of_couple_of_days(D)
+
+        new_data['timeslot_of_students'] = self.time_rec
+        new_data['course_of_students'] = self.course_rec
+        
+        return new_data
+            
     
     def up_bound(self):
         
@@ -104,6 +124,9 @@ class Data:
             
             for l in range(self.L):
                 k = int(count_gr[l])
+                
+                if k >= K:
+                    break
                 
                 if k == num_gr_of_course[l] + 1:
                     continue

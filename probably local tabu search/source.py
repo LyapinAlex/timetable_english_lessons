@@ -199,6 +199,7 @@ def local_search(num_it, p ,data, sol, name = "history_sol"):
     # f.close()
     return best_sol
 
+# Неиспользовать
 def gradient_descent( data, sol, i):
 
     # best_val = sol.get_sol()
@@ -498,20 +499,20 @@ def get_num_var_and_constr():
 
     print(f" sum all constr = {sum_constr}")
 
+def alg(i):
+
+    
+    data = Data(J, L, I, T , D, r, minN, maxN, timeL )
+    filename_data = f"examples_copy\\orders_3_{i}.txt"
+    data.read_input(filename_data)
+
+    return data.up_bound()
 
 if __name__ == '__main__':
 
     
-    a = np.sum(np.array([74.44,
-67.88,
-66.94,
-65.41,
-67.06,
-71.46,
-66.39,
-66.78,
-70.02,
-69.43
-])) 
+    a =0.0
+    for i in range(1,11):
+        a+=alg(i)
+        print(alg(i))
     print(a/10)
-    # launch()

@@ -26,6 +26,7 @@ def base_group(data, config = None):
     if config == None:
         create_schedule(data, schedule)
     if config == "rand":
+        raise "Launch dont finish method"
         create_schedule_rand(data, schedule)
 
     return schedule 
