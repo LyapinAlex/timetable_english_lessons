@@ -9,14 +9,14 @@ from .appoinment.appoinment import appointment
 def base_schedule(data, sol_1):
 
     schedule = {
-    'real_time': 4 * data['T'],
+    'real_time': data['num_div'] * data['T'],
     'teachers': [[] for __ in range(data['I'])], 
     'teachers_work_days': np.zeros((data['D'], data['I'])),
-    'schedule_of_teachers': np.zeros((data['I'], data['D'], 4 * data['T']))}
+    'schedule_of_teachers': np.zeros((data['I'], data['D'], data['num_div'] * data['T']))}
 
     change_format_group(data, sol_1)
 
-    print(sol_1['groups'])
+    
 
     appointment(data, sol_1, schedule)
 

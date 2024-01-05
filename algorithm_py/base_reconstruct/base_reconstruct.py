@@ -10,7 +10,7 @@ def base_reconstruct(data, sol_1, sol_2):
     
     reforming_groups(sol_1)
     
-    add_new_groups( data, sol_1, sol_2)
+    # add_new_groups( data, sol_1, sol_2)
     
     full_all_groups(data, sol_1)
     

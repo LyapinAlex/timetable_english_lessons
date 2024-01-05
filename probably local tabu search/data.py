@@ -1,4 +1,5 @@
 import numpy as np
+from params import *
 
 def restruct(J, D, T, L, tl, A, B ):
     
@@ -57,6 +58,116 @@ class Data:
         self.timeRec = restruct(self.J, self.D, self.T, self.L, self.timeL, a, self.courseRec )
         return 0
 
+    
+    
+    def students_stats(self):
+        
+        num_st_of_course = np.sum(self.courseRec, axis=0)
+
+        num_gr_of_course = np.ceil(np.divide(num_st_of_course, 8))
+        
+        
+        print(num_st_of_course)
+
+
+    
+    def school_power(self):
+        
+        return self.D * self.r * teacherLimit 
+    
+    def get_dict_form(self):
+        
+        
+        new_data = {}
+        new_data['J'] = J
+        new_data['L'] = L
+        new_data['D'] = D# num of day
+        new_data['T'] = T# num of timslots in the 
+        new_data['I'] = I# num of teachers
+        new_data['r'] = r # num of rooms
+        new_data['number_working_rooms'] = r # num of rooms
+        new_data['minNumber'] = minN# min number of students in the group
+        new_data['maxNumber'] = maxN# max number of students in the group
+        new_data['timeLessons']  = timeL 
+
+        new_data['couple_of_Days'] =  get_list_of_couple_of_days(D)
+
+        new_data['timeslot_of_students'] = self.time_rec
+        new_data['course_of_students'] = self.course_rec
+        
+        return new_data
+            
+    
+    def up_bound(self):
+        
+        num_gr_of_course = np.floor(np.divide(np.sum(self.courseRec, axis=0), self.maxN))
+        rem_st_of_course = np.mod(np.sum(self.courseRec, axis=0), self.maxN)
+        # print(np.sum(self.courseRec, axis=0))
+        # print(num_gr_of_course)
+        # print(rem_st_of_course)
+        count_gr = np.zeros((self.L))
+        
+        objval = 0.0
+        
+        P = self.school_power()
+        R = 0
+        
+ 
+        
+        while(True): 
+            
+            # print(P,R)
+            gr_course = None
+            gr_R = 0.0 
+            gr_objval = 0.0
+            
+            
+            for l in range(self.L):
+                k = int(count_gr[l])
+                
+                if k >= K:
+                    break
+                
+                if k == num_gr_of_course[l] + 1:
+                    continue
+                
+                value =  8  if k < num_gr_of_course[l] else rem_st_of_course[l]
+                value-=F[l,k]
+                if value <= 0:
+                    continue
+                
+                if  gr_objval < value and R + 2*timeL[l] <= P:
+                    gr_objval = value
+                    gr_course = l
+                    gr_R = 2*timeL[l]
+            
+            if gr_course == None:
+                break
+            
+            
+            count_gr[gr_course]+=1
+            R+= gr_R
+            objval+=gr_objval
+        
+        
+        # print(R, objval)
+        # print(count_gr)
+        return objval
+            
+                
+                
+            
+        
+        
+        
+        
+            
+            
+            
+        
+        
+        
+        
 
 
 def get_list_of_couple_of_days(num_days):
@@ -67,3 +178,5 @@ def get_list_of_couple_of_days(num_days):
             list.append((d_1,d_2))
 
     return np.array(list)
+
+    

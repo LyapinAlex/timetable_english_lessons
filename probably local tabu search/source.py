@@ -199,6 +199,7 @@ def local_search(num_it, p ,data, sol, name = "history_sol"):
     # f.close()
     return best_sol
 
+# Неиспользовать
 def gradient_descent( data, sol, i):
 
     # best_val = sol.get_sol()
@@ -291,36 +292,33 @@ def launch():
 
     data = Data(J, L, I, T , D, r, minN, maxN, timeL )
     
-    i = 0
-    sum_objval = 0
-    obj_val_array = np.zeros((10))
+    i = 1
+
     # path = "C:/Users/sasha/OneDrive/Рабочий стол/english lessons/model/sol model"
     path = "C:/Users/sasha/OneDrive/Рабочий стол/english lessons/model/gurobi model ver 1.1"
+
     sr = 0
 
-    for i in range(1,6):
+
+    for i in range(1, 11):
         filename_data = f"examples_copy\\orders_2_{i}.txt"
         data.read_input(filename_data)
-        # filename_sol = f"sol_{i}"
-        filename_sol = f"sol_gurobi_ex_{i}_time_3600_ver1.1"
-        sol = Solution( os.path.join(path, filename_sol))
+        
+        # data.students_stats()
+        print(data.up_bound())
+        
+    raise
+    filename_sol = f"sol_{i}"
+    # filename_sol = f"sol_gurobi_ex_{i}_time_3600_ver1.1"
+    # sol = Solution( os.path.join(path, filename_sol))
+    sol = Solution(filename_sol)
+    
+    rebuild_timetable([0,1,2,3,4],data, sol)
 
-        print(sol.get_sol_val())
-        sr+=sol.get_sol_val()['obj_val']
-    print(sr/5)
-    sr = 0
-    for i in range(1,6):
-        filename_data = f"examples_copy\\orders_2_{i}.txt"
-        data.read_input(filename_data)
-        # filename_sol = f"sol_{i}"
-        filename_sol = f"sol_gurobi_ex_{i}_time_7200_ver1.1"
-        sol = Solution( os.path.join(path, filename_sol))
 
-        print(sol.get_sol_val())
-        sr+=sol.get_sol_val()['obj_val']
-    print(sr/5)
+    print(sol.get_sol_val())
+    sr+=sol.get_sol_val()['obj_val']
 
-    # get_num_var_and_constr()
 
 
     return
@@ -501,8 +499,20 @@ def get_num_var_and_constr():
 
     print(f" sum all constr = {sum_constr}")
 
+def alg(i):
+
+    
+    data = Data(J, L, I, T , D, r, minN, maxN, timeL )
+    filename_data = f"examples_copy\\orders_3_{i}.txt"
+    data.read_input(filename_data)
+
+    return data.up_bound()
 
 if __name__ == '__main__':
-    # get_num_var_and_constr()
-    # get_num_var_and_constr()
-    launch()
+
+    
+    a =0.0
+    for i in range(1,11):
+        a+=alg(i)
+        print(alg(i))
+    print(a/10)

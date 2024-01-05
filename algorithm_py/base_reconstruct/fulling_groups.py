@@ -46,6 +46,7 @@ def check_can_be_join(group, data, j):
     
     first_time = work_times[0][1]
     second_time=work_times[1][1]
+ 
     if first_time in range(info[d_1][0]*4, info[d_1][-1]*4 ) and second_time in range(info[d_2][0]*4,info[d_2][-1]*4 ):
         return True
 

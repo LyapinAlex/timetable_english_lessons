@@ -1,6 +1,7 @@
 import numpy as np
 import copy
 import time
+from params import *
 from random import shuffle
 import pdb
 
@@ -16,7 +17,7 @@ def create_schedule(data, schedule):
 
     number_working_rooms = copy.copy(data['number_working_rooms'])
     for d in range(data['D']):
-        for t in range(4*data['T']):
+        for t in range(timeslotsInHour*data['T']):
             number_working_rooms[d,t] = min(r - number_working_rooms[d,t], I)
 
     T = 4*data['T']
@@ -43,7 +44,7 @@ def create_schedule(data, schedule):
     
     for l in B: 
         # print('l', l)
-        time_list_creat = time.perf_counter()
+        # time_list_creat = time.perf_counter()
 
         set_id_students = list_set_students[l]
         # print(len(set_id_students))
