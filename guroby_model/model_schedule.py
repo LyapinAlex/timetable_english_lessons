@@ -28,7 +28,7 @@ def restruct(J, D, T, L, tl, A, B ):
                                 else:
                                      a[j,d,k*t+ k-1 + t_p] = 1
 
-    # print(a[0])
+
     return a
 
 def import_json_data(filename = 'sol'):
@@ -44,7 +44,7 @@ def read_data(name = None, i = 0):
     file_name = name
     #     data = read_data("examples_copy\\orders_2_1.txt")
 
-    # file_nam e = f"examples_copy\\orders_2_{i}.txt"
+    # file_name = f"examples_copy\\orders_2_{i}.txt"
     fileOrders = open(file_name)
     orders = fileOrders.readlines()
     input_str_a = orders[3]
@@ -62,15 +62,15 @@ def read_data(name = None, i = 0):
     # data['minNumber'] = 2# min number of students in the group
     # data['maxNumber'] = 8# max number of students in the group
     # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
-    # data['J'] = 150
-    # data['L'] = 3
-    # data['D'] = 6# num of day
-    # data['T'] = 11# num of timslots in the 
-    # data['I'] = 3# num of teachers
-    # data['r'] = 2# num of rooms
-    # data['minNumber'] = 2# min number of students in the group
-    # data['maxNumber'] = 6# max number of students in the group
-    # data['timeLessons']  = np.array([ 4, 5, 6])
+    data['J'] = 150
+    data['L'] = 3
+    data['D'] = 6# num of day
+    data['T'] = 11# num of timslots in the 
+    data['I'] = 3# num of teachers
+    data['r'] = 2# num of rooms
+    data['minNumber'] = 2# min number of students in the group
+    data['maxNumber'] = 6# max number of students in the group
+    data['timeLessons']  = np.array([ 4, 5, 6])
 
     # новая яразмерность
    
@@ -83,15 +83,18 @@ def read_data(name = None, i = 0):
     # data['minNumber'] = 2# min number of students in the group
     # data['maxNumber'] = 6# max number of students in the group
     # data['timeLessons']  = np.array([3, 4, 5 , 6])
-    data['J'] = 300# num of studetns
-    data['L'] = 4# num of course
-    data['D'] = 6# num of day
-    data['T'] = 8# num of timslots in the day
-    data['I'] = 4# num of teachers
-    data['r'] = 3# num of rooms
-    data['minNumber'] = 2# min number of students in the group
-    data['maxNumber'] = 6# max number of students in the group
-    data['timeLessons']  = np.array([3, 4, 5 , 6])
+
+
+
+    # data['J'] = 300# num of studetns
+    # data['L'] = 8# num of course
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the day
+    # data['I'] = 4# num of teachers
+    # data['r'] = 3# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 6# max number of students in the group
+    # data['timeLessons']  = np.array([3, 3, 4, 4, 5 ,5, 6, 6])
 
 
 
@@ -118,13 +121,14 @@ def cb(model, where):
     if time.time() - model._time > 60*30:
         model.terminate()
 
-# J = np.arange(0, 150, 1) # Заявки
-# K = np.arange(0, 15, 1) # Количество групп
-# L = np.arange(0, 3, 1) # Множество курсов
-# D = np.arange(0, 6, 1) # Рабочие дни
-# T = np.arange(0, 44, 1) # Множество временных слотов
-# I = np.arange(0, 3, 1) # Множество преподователь 
-# r = 2 # Количество комнат
+
+J = np.arange(0, 150, 1) # Заявки
+K = np.arange(0, 6, 1) # Количество групп
+L = np.arange(0, 3, 1) # Множество курсов
+D = np.arange(0, 6, 1) # Рабочие дни
+T = np.arange(0, 44, 1) # Множество временных слотов
+I = np.arange(0, 3, 1) # Множество преподователь 
+r = 2 # Количество комнат
 # J = np.arange(0, 500, 1) # Заявки
 # K = np.arange(0, 25, 1) # Количество групп
 # L = np.arange(0, 13, 1) # Множество курсов
@@ -135,15 +139,14 @@ def cb(model, where):
 
 
 # новая яразмерность
-J = np.arange(0, 300, 1) # Заявки
-K = np.arange(0, 10, 1) # Количество групп
-L = np.arange(0, 4, 1) # Множество курсов
-D = np.arange(0, 6, 1) # Рабочие дни
-T = np.arange(0, 4*8, 1) # Множество временных слотов
-I = np.arange(0, 3, 1) # Множество преподователь 
-r = 2 # Количество комнат
+# J = np.arange(0, 300, 1) # Заявки
+# K = np.arange(0, 10, 1) # Количество групп
+# L = np.arange(0, 8, 1) # Множество курсов
+# D = np.arange(0, 6, 1) # Рабочие дни
+# T = np.arange(0, 4*11, 1) # Множество временных слотов
 # I = np.arange(0, 4, 1) # Множество преподователь 
 # r = 3 # Количество комнат
+
 
 
 
@@ -194,12 +197,37 @@ F = [] # Штрафы на создание каждой новой группы
 
 
 # F=np.array(F)
-F = np.array([[0,0,0,2.5,2.5,2.5,2.5,2.5,2.5,2.5],
-              [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
-              [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
-              [0,0,0,2.5,2.5,2.5,2.5,2.5,2.5,2.5]])
+# # ДЛЯ РАЗМЕРНОСТИ(150  ЛЮДЕЙ)
+F = np.array([[0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+              [0,0,0,0,0,2.5,2.5,2.5,2.5,2.5],
+              [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5]])
 
 
+
+# ДЛЯ НОВОЙ РАЗМЕРНОСТИ(300 ЛЮДЕЙ)
+# F = np.array([[0,0,0,2.5,2.5,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,0,0,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,0,0,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,0,2.5,2.5,2.5,2.5,2.5,2.5],
+#               [0,0,0,2.5,2.5,2.5,2.5,2.5,2.5,2.5]])
+
+# ДЛЯ НОВОЙ РАЗМЕРНОСТИ(500 ЛЮДЕЙ)
+# F = np.array([[0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0,   0,   0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5],
+#               [0, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5]])
 
 class Problem:
 
@@ -208,13 +236,13 @@ class Problem:
         # str = f"C:/Users/Александр/source/vscode_project/Operation research/examples_copy/orders_2_{i}.txt"
         # f"examples_copy\\orders_hand_make.txt"
         # data = read_data("examples_copy\\orders_hm.txt")
-        data = read_data(f"examples_copy\\orders_3_{i}.txt")
+        data = read_data(f"examples_copy\\orders_1_{i}.txt")
         self.a =restruct(data['J'], data['D'], data['T'], data['L'], data['timeLessons'], data['timeslot_of_students'], data['course_of_students']  )
         self.b = data['course_of_students'] 
         self.lt = data['timeLessons']
         # Иницализация моедли
         # self.model = gr.Model("Schedule creating") 
-        self.model = gr.Model("Schedule without teachers") 
+        self.model = gr.Model("Schedule without teachers 1") 
         self.model.Params.logFile = f"consol_info_{i}"
         # Переменые 
         # print(K)
@@ -227,11 +255,11 @@ class Problem:
 
         # Преводаватели
 
-        self.u = self.model.addVars(I, K, L, vtype = gr.GRB.BINARY, name = "u")
-        self.P = self.model.addVars(I, D, vtype = gr.GRB.BINARY, name = "P")
-        self.U = self.model.addVars(I, D, T, K, L, vtype = gr.GRB.BINARY, name = "U")
-        self.S = self.model.addVars(I, D, T, vtype = gr.GRB.BINARY, name = "S")
-        self.C = self.model.addVars(I, D, T, vtype = gr.GRB.BINARY, name = "C")
+        # self.u = self.model.addVars(I, K, L, vtype = gr.GRB.BINARY, name = "u")
+        # self.P = self.model.addVars(I, D, vtype = gr.GRB.BINARY, name = "P")
+        # self.U = self.model.addVars(I, D, T, K, L, vtype = gr.GRB.BINARY, name = "U")
+        # self.S = self.model.addVars(I, D, T, vtype = gr.GRB.BINARY, name = "S")
+        # self.C = self.model.addVars(I, D, T, vtype = gr.GRB.BINARY, name = "C")
         
         # Целевая функция 
 
@@ -320,77 +348,77 @@ class Problem:
                 self.model.addLConstr(gr.quicksum((self.p[d, k, l]) for d in D) == 2*self.z[k,l])
 
 
-        #(13) Для каждой сформированной группы есть преподаватель, руководящей ею
-        for l in L:
-            for k in K:
-                self.model.addLConstr(gr.quicksum((self.u[i, k, l]) for i in I) == self.z[k,l])
+        # #(13) Для каждой сформированной группы есть преподаватель, руководящей ею
+        # for l in L:
+        #     for k in K:
+        #         self.model.addLConstr(gr.quicksum((self.u[i, k, l]) for i in I) == self.z[k,l])
 
-        # (14) Расписание преподавателя для каждой группы
-        for i in I:
-            for d in D:
-                for t in T:
-                    for k in K:
-                        for l in L:
-                            self.model.addLConstr(self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])
-                            self.model.addLConstr(self.U[i, d, t, k, l] <= self.u[i, k, l])
-                            self.model.addLConstr(self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l] + self.u[i, k, l] - self.U[i, d, t, k, l] <= 1)
-
-        #(14.1) Расписание преподавателя для каждой группы
+        # # (14) Расписание преподавателя для каждой группы
         # for i in I:
-            # self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for d in D for t in T for k in K for l in L) <= 2*(gr.quicksum(self.lt[l] * self.u[i, k, l] for k in K for l in L)))
+        #     for d in D:
+        #         for t in T:
+        #             for k in K:
+        #                 for l in L:
+        #                     self.model.addLConstr(self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])
+        #                     self.model.addLConstr(self.U[i, d, t, k, l] <= self.u[i, k, l])
+        #                     self.model.addLConstr(self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l] + self.u[i, k, l] - self.U[i, d, t, k, l] <= 1)
+
+        # #(14.1) Расписание преподавателя для каждой группы
+        # # for i in I:
+        #     # self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for d in D for t in T for k in K for l in L) <= 2*(gr.quicksum(self.lt[l] * self.u[i, k, l] for k in K for l in L)))
 
 
-        #(15) Преподаватель в любой момент времени работает только с одной группой
-        for i in I:
-            for d in D:
-                for t in T:
-                    self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= 1)
+        # #(15) Преподаватель в любой момент времени работает только с одной группой
+        # for i in I:
+        #     for d in D:
+        #         for t in T:
+        #             self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= 1)
 
-        #(16) После занятия, у преподавателя идет перерыв 
-        for i in I:
-            for d in D:
-                for t in T:
-                    for k_1 in K:
-                        for l_1 in L:
-                            if t >= len(T) - 1:
-                                continue
-                            self.model.addConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.c[d, t, k_1, l_1] +  self.s[d, t, k_1, l_1] - self.p[d, k_1, l_1] + 1 - self.U[i, d, t + 1, k_1, l_1] )
+        # #(16) После занятия, у преподавателя идет перерыв 
+        # for i in I:
+        #     for d in D:
+        #         for t in T:
+        #             for k_1 in K:
+        #                 for l_1 in L:
+        #                     if t >= len(T) - 1:
+        #                         continue
+        #                     self.model.addConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.c[d, t, k_1, l_1] +  self.s[d, t, k_1, l_1] - self.p[d, k_1, l_1] + 1 - self.U[i, d, t + 1, k_1, l_1] )
                             
 
-        #(17) Если у преподователя занимается группа в день d, то и он должен работать в этот день
-        for i in I:
-            for k in K:
-                for l in L:
-                    for d in D:
-                        self.model.addLConstr(self.p[d, k, l] + self.u[i, k, l] - self.P[i, d] <= 1)
+        # #(17) Если у преподователя занимается группа в день d, то и он должен работать в этот день
+        # for i in I:
+        #     for k in K:
+        #         for l in L:
+        #             for d in D:
+        #                 self.model.addLConstr(self.p[d, k, l] + self.u[i, k, l] - self.P[i, d] <= 1)
 
-        #(18) У всех преподавателей не больше пяти рабочих дней
-        for i in I:
-            self.model.addLConstr(gr.quicksum( self.P[i, d] for d in D) <= 5)
-
-
-        # #(19) Условия на задание рабочий таймслотов преподавателя
-        for i in I:
-            for d in D:
-                for t in T:
-                    self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.S[i, d, t]  )
-
-                    self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.C[i, d, t]  )
-
-                    if t + 1 == len(T):
-                        continue
-                    self.model.addLConstr(self.S[i, d, t] <= self.S[i, d, t + 1])
-
-                    self.model.addLConstr(self.C[i, d, t] >= self.C[i, d, t + 1])
-
-        #(20) Условия на продолжительность рабочего дня
-
-        for i in I:
-            for d in D:
-                self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 24*self.P[i, d]))
+        # #(18) У всех преподавателей не больше пяти рабочих дней
+        # for i in I:
+        #     self.model.addLConstr(gr.quicksum( self.P[i, d] for d in D) <= 5)
 
 
-        self.model.write(f"English_Lesson_I_3_{self.i}_K_{len(K)}_ver2.1.lp")  
+        # # #(19) Условия на задание рабочий таймслотов преподавателя
+        # for i in I:
+        #     for d in D:
+        #         for t in T:
+        #             self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.S[i, d, t]  )
+
+        #             self.model.addLConstr(gr.quicksum(self.U[i, d, t, k, l] for k in K for l in L) <= self.C[i, d, t]  )
+
+        #             if t + 1 == len(T):
+        #                 continue
+        #             self.model.addLConstr(self.S[i, d, t] <= self.S[i, d, t + 1])
+
+        #             self.model.addLConstr(self.C[i, d, t] >= self.C[i, d, t + 1])
+
+        # #(20) Условия на продолжительность рабочего дня
+
+        # for i in I:
+        #     for d in D:
+        #         self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in T) <= (len(T) + 32*self.P[i, d]))
+
+
+        self.model.write(f"English_Lesson_WT_K_{len(K)}_EX_{self.i}_ver3.1.lp")  
 
         # self.model.write(f"English_Lesson_WT_{self.i}_K_{len(K)}_ver1.1.lp")
         
@@ -474,11 +502,13 @@ def tuning_models(i_num):
 
 
 def launch():
-    i = 1 
+ 
+
+    k = 10 
+
     for i in range(1,11):
-        p = Problem(i, range(10))
-        # tuning_models(i)
-    # p.calculate(60*30)
+        p = Problem(i, range(k))
+ 
 
 if __name__ == "__main__":
     launch()

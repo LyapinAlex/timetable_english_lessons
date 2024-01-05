@@ -76,7 +76,7 @@ def restruct(J, D, T, L, tl, A, B ):
     return a
 
 
-def read_data(name = None, i = 0):
+def read_data(name = None, k = 10, i = 0):
     if name == None:
         return 0
     file_name = name
@@ -100,27 +100,28 @@ def read_data(name = None, i = 0):
     # data['minNumber'] = 2# min number of students in the group
     # data['maxNumber'] = 8# max number of students in the group
     # data['timeLessons']  = np.array([3, 3, 3, 3, 3, 4, 3, 4, 5, 5, 5, 6, 6])
-    data['K'] = 10
-    # data['J'] = 150
-    # data['L'] = 3
-    # data['D'] = 6# num of day
-    # data['T'] = 11# num of timslots in the 
-    # data['I'] = 3# num of teachers
-    # data['r'] = 2# num of rooms
-    # data['minNumber'] = 2# min number of students in the group
-    # data['maxNumber'] = 6# max number of students in the group
-    # data['timeLessons']  = np.array([ 4, 5, 6])
-
-       
-    data['J'] = 300# num of studetns
-    data['L'] = 4# num of course
+    data['K'] = k
+    data['J'] = 150
+    data['L'] = 3
     data['D'] = 6# num of day
-    data['T'] = 8# num of timslots in the day
+    data['T'] = 11# num of timslots in the 
     data['I'] = 3# num of teachers
     data['r'] = 2# num of rooms
     data['minNumber'] = 2# min number of students in the group
     data['maxNumber'] = 6# max number of students in the group
-    data['timeLessons']  = np.array([3, 4, 5 , 6])
+    data['timeLessons']  = np.array([ 4, 5, 6])
+
+       
+    # data['J'] = 300# num of studetns
+    # data['L'] = 8# num of course
+    # data['D'] = 6# num of day
+    # data['T'] = 11# num of timslots in the day
+    # data['I'] = 4# num of teachers
+    # data['r'] = 3# num of rooms
+    # data['minNumber'] = 2# min number of students in the group
+    # data['maxNumber'] = 6# max number of students in the group
+    # data['timeLessons']  = np.array([3, 3, 4, 4, 5 ,5, 6, 6])
+
 
 
     data['course_of_students'] = np.fromstring(input_str_b, dtype = int, sep = ' ').reshape((data['J'], data['L']))
@@ -274,14 +275,14 @@ def get_alg_sol(model, data):
     return groups
 
 
-def main(i_num, time):
+def main(i_num, k_num, time):
     
     # i = 1
     file_name = f"sol_{i_num}"
     # file_name = f"sol_gurobi_ex_{i_num}_time_10800"
     sol = import_json_data(file_name)
 
-    data = read_data(f"examples_copy\\orders_3_{i_num}.txt")
+    data = read_data(f"examples_copy\\orders_1_{i_num}.txt", k=k_num)
     
     y = np.zeros( (data['J'], data['K']) )
     z = np.zeros( (data['K'], data['L']) )
@@ -353,8 +354,10 @@ def main(i_num, time):
 
     # print(f'C:\cyrillic_characters\English_Lesson_I_{i}_K_10.lp')
 
-    # model_name = f'C:\cyrillic_characters\English_Lesson_I_{i_num}_K_10.lp'
-    model_name = f"English_Lesson_I_3_{i_num}_K_{10}_ver2.1.lp"
+    # model_name = f"English_Lesson_I_5_K_{data['K']}_EX_{i_num}_ver3.1.lp"
+    model_name = f"English_Lesson_WT_K_{data['K']}_EX_{i_num}_ver3.1.lp"
+
+    # model_name = f"English_Lesson_I_3_{i_num}_K_{data['K']}_ver3.1.lp"
     # model_name = f"English_Lesson_WT_tuning_{i_num}_K_{10}_ver1.0.lp"
     model = gr.read(model_name)
     # model.read(f"S_{i_num}_ver2.0.sol")
@@ -428,7 +431,7 @@ def main(i_num, time):
 
     model.update()
 
-    model.Params.logFile = f"consol_sol_{i_num}_time_{time}_ver2.1.txt"
+    model.Params.logFile = f"consol_sol_{i_num}_time_{time}_K_{data['K']}_EX_{i_num}_ver3.1.txt"
     model.params.TimeLimit = time
     # model.setParam("Method", 2)
     # model.setParam("MIPFocus", 1)
@@ -437,7 +440,9 @@ def main(i_num, time):
     #     # model.params.TimeLimit = 60*60
     #     # model.update()
     model.optimize()
-    model.write(f"S_{i_num}_ver2.1.sol")
+    model.write(f"English_Lesson_WT_K_{data['K']}_EX_{i_num}_ver3.1.lp")  
+
+    model.write(f"S_K_{data['K']}_EX_{i_num}_ver3.1.sol")
     # groups = get_alg_sol(model, data)
     # import_JSON(groups, name = f"sol_gurobi_ex_{i_num}_time_{time}_ver1.2")
     # model.write(f"English_lesson_exp_{i_num}_time_{2*60*10}.lp")
@@ -450,16 +455,13 @@ def main(i_num, time):
 
 if __name__ == "__main__":
     
-    # time_work = 60*60*2
-    # for i in range(1, 6):
-    #     main(i, time_work)
-    # time_work = 60*60
-    # for i in range(1, 6):
-    #     main(i, time_work)
-
     
-    for i in range(2, 11):
-        main(i, 3600)
+    # for k in range(2,10):
+    k = 10
+
+    for i in range(1, 11):
+
+        main(i, k, 3600)
 
 
     
