@@ -6,6 +6,9 @@ import time
 import json
 from tabulate import tabulate
 from model_schedule import *
+from solution import *
+from data import *
+
 
 
 # data = {}
@@ -275,179 +278,216 @@ def get_alg_sol(model, data):
     return groups
 
 
-def main(i_num, k_num, time):
+def main(i_num, k_num, time = None):
     
-    # i = 1
-    file_name = f"sol_{i_num}"
-    # file_name = f"sol_gurobi_ex_{i_num}_time_10800"
-    sol = import_json_data(file_name)
 
-    data = read_data(f"examples_copy\\orders_1_{i_num}.txt", k=k_num)
+    # file_name = f"sol_ex_{i_num}_dim_3.json"
+
+    # sol = Solution(file_name)
+  
+
+    # # data = read_data(f"examples_copy\\orders_1_{i_num}.txt", k=k_num)
     
-    y = np.zeros( (data['J'], data['K']) )
-    z = np.zeros( (data['K'], data['L']) )
-    s = np.zeros( (data['D'], timeslotsInHour * data['T'], data['K'], data['L']) )
-    c = np.zeros( (data['D'], timeslotsInHour * data['T'], data['K'], data['L']) )
-    p = np.zeros( (data['D'], data['K'], data['L']))
+    # data = Data(J, L, I, T , D, r, minN, maxN, timeL )
+    # filename_data = f"examples_copy\\orders_2_{i_num}.txt"
+    # data.read_input(filename_data)
 
-    u = np.zeros( (data['I'], data['K'], data['L']) )
-    U = np.zeros( (data['I'], data['D'], timeslotsInHour * data['T'], data['K'], data['L']) )
-    S = np.zeros( (data['I'], data['D'], timeslotsInHour * data['T']) )
-    C = np.zeros( (data['I'], data['D'], timeslotsInHour * data['T']) )
-    P = np.zeros( (data['I'], data['D']) )
+    model_name = f"English_Lesson_K_{k_num}_EX_{i_num}_ver4.lp"
 
-    # for group in sol:
-
-    #     list_students = group[0]
-    #     k = group[1] - 1
-    #     l = group[2]
-    #     i = group[5]
-    #     d_1 =group[3]
-    #     d_2 = group[4]
-
-    #     for j in list_students:
-    #         y[j,k] = 1 
- 
-    #     z[k,l] = 1
-
-    #     for t in range(timeslotsInHour * data['T']):
-    #         if t >= d_1[1]:
-    #             s[d_1[0], t , k, l] = 1
-    #         if t >= d_2[1]:
-    #             s[d_2[0], t , k, l] = 1
-
-
-    #     for t in range(timeslotsInHour * data['T']):
-    #         if t <= d_1[2]:
-    #             c[d_1[0], t , k, l] = 1
-    #         if t <= d_2[2]:
-    #             c[d_2[0], t , k, l] = 1
-
-    #     p[d_1[0], k, l] = 1
-    #     p[d_2[0], k, l] = 1
-
-    #     u[i, k, l] = 1
-        
-    #     P[i,d_1[0]] = 1
-    #     P[i,d_2[0]] = 1
-
-    #     for t in range(timeslotsInHour * data['T']):
-    #         if c[d_1[0], t , k, l] + s[d_1[0], t , k, l] - p[d_1[0], k, l] == 1:
-    #             U[i,d_1[0], t, k, l] = 1
-
-    #         if c[d_2[0], t , k, l] + s[d_2[0], t , k, l] - p[d_2[0], k, l] == 1:
-    #             U[i,d_2[0], t, k, l] = 1
-
-    #     for t in range(timeslotsInHour * data['T']):
-    #         if t >= d_1[1]:
-    #             S[i, d_1[0], t] = 1
-    #         if t >= d_2[1]:
-    #             S[i, d_2[0], t] = 1
-
-
-    #     for t in range(timeslotsInHour * data['T']):
-    #         if t <= d_1[2]:
-    #             C[i, d_1[0], t] = 1
-    #         if t <= d_2[2]:
-    #             C[i, d_2[0], t] = 1 
-
-
-    # print(f'C:\cyrillic_characters\English_Lesson_I_{i}_K_10.lp')
-
-    # model_name = f"English_Lesson_I_5_K_{data['K']}_EX_{i_num}_ver3.1.lp"
-    model_name = f"English_Lesson_WT_K_{data['K']}_EX_{i_num}_ver3.1.lp"
-
-    # model_name = f"English_Lesson_I_3_{i_num}_K_{data['K']}_ver3.1.lp"
-    # model_name = f"English_Lesson_WT_tuning_{i_num}_K_{10}_ver1.0.lp"
+    # model_name = f"English_Lesson_L_{str(k_num)}_EX_{i_num}_ver5.lp"
     model = gr.read(model_name)
-    # model.read(f"S_{i_num}_ver2.0.sol")
-    # English_lesson_exp_4_time_600.sol
-    # model = gr.read("C:\cyrillic_characters\English_lesson_exp_1_time_600.lp")
-    model.update()
 
-   
+
+    # sol_name = f"S_K_{k_num}_EX_{i_num}_ver4.1.sol"
+    # # Чтение решения
+    # model.read(sol_name)
+    # model.update()
+
+
 
     # # self.y = self.model.addVars(J, K, vtype = gr.GRB.BINARY, name = "y")
-    # for j in range(data['J']):
-    #     for k in range(data['K']):
-    #         model.getVarByName(f'y[{j},{k}]').Start = int(y[j,k])
+    # for j in range(data.J):
+    #     for k in range( k_num):
+    #         model.getVarByName(f'y[{j},{k}]').Start = int(sol.y[j,k])
 
   
 
     # # self.z = self.model.addVars(K, L, vtype = gr.GRB.BINARY, name = "z")
-    # for k in range(data['K']):
-    #     for l in range(data['L']):
-    #         model.getVarByName(f'z[{k},{l}]').Start = int(z[k,l])
+    # for k in range( k_num):
+    #     for l in range(data.L):
+    #         model.getVarByName(f'z[{k},{l}]').Start = int(sol.z[k,l])
 
     # # self.c = self.model.addVars(D, T, K, L, vtype = gr.GRB.BINARY, name = "c")
     # # self.s = self.model.addVars(D, T, K, L, vtype = gr.GRB.BINARY, name = "s")
-    # for d in range(data['D']):
-    #     for t in range(timeslotsInHour * data['T']):
-    #         for k in range(data['K']):
-    #             for l in range(data['L']):
-    #                 model.getVarByName(f'c[{d},{t},{k},{l}]').Start = int(c[d,t,k,l])
-    #                 model.getVarByName(f's[{d},{t},{k},{l}]').Start = int(s[d,t,k,l])
+    # for d in range(data.D):
+    #     for t in range(timeslotsInHour * data.T):
+    #         for k in range( k_num):
+    #             for l in range(data.L):
+    #                 model.getVarByName(f'c[{d},{t},{k},{l}]').Start = int(sol.c[d,t,k,l])
+    #                 model.getVarByName(f's[{d},{t},{k},{l}]').Start = int(sol.s[d,t,k,l])
         
     
     # # self.p = self.model.addVars(D, K, L, vtype = gr.GRB.BINARY, name = "p")
-    # for d in range(data['D']):
-    #     for k in range(data['K']):
-    #         for l in range(data['L']):
-    #             model.getVarByName(f'p[{d},{k},{l}]').Start = int(p[d,k,l])
+    # for d in range(data.D):
+    #     for k in range( k_num):
+    #         for l in range(data.L):
+    #             model.getVarByName(f'p[{d},{k},{l}]').Start = int(sol.p[d,k,l])
         
 
 
     # # # Преводаватели
 
     # # self.u = self.model.addVars(I, K, L, vtype = gr.GRB.BINARY, name = "u")
-    # for i in  range(data['I']):
-    #     for k in range(data['K']):
-    #         for l in range(data['L']):
-    #             model.getVarByName(f'u[{i},{k},{l}]').Start = int(u[i,k,l])
+    # for i in  range(data.I):
+    #     for k in range( k_num):
+    #         for l in range(data.L):
+    #             model.getVarByName(f'u[{i},{k},{l}]').Start = int(sol.u[i,k,l])
 
     # # self.P = self.model.addVars(I, D, vtype = gr.GRB.BINARY, name = "P")
-    # for i in range(data['I']):
-    #     for d in range(data['D']):
-    #         model.getVarByName(f'P[{i},{d}]').Start = int(P[i,d])
+    # for i in range(data.I):
+    #     for d in range(data.D):
+    #         model.getVarByName(f'P[{i},{d}]').Start = int(sol.P[i,d])
 
 
     # # self.U = self.model.addVars(I, D, T, K, L, vtype = gr.GRB.BINARY, name = "U")
-    # for i in range(data['I']):
-    #     for d in range(data['D']):
-    #         for t in range(timeslotsInHour * data['T']):
-    #             for k in range(data['K']):
-    #                 for l in range(data['L']):
-    #                     model.getVarByName(f'U[{i},{d},{t},{k},{l}]').Start = int(U[i,d,t,k,l])
+    # for i in range(data.I):
+    #     for d in range(data.D):
+    #         for t in range(timeslotsInHour * data.T):
+    #             for k in range( k_num):
+    #                 for l in range(data.L):
+    #                     model.getVarByName(f'U[{i},{d},{t},{k},{l}]').Start = int(sol.U[i,d,t,k,l])
 
-    # # self.S = self.model.addVars(I, D, T, vtype = gr.GRB.BINARY, name = "S")
-    # # self.C = self.model.addVars(I, D, T, vtype = gr.GRB.BINARY, name = "C")
-    # for i in range(data['I']):
-    #     for d in range(data['D']):
-    #         for t in range(timeslotsInHour * data['T']):
-    #             model.getVarByName(f'S[{i},{d},{t}]').Start = int(S[i,d,t])
-    #             model.getVarByName(f'C[{i},{d},{t}]').Start = int(C[i,d,t])
+
+    # for i in range(data.I):
+    #     for d in range(data.D):
+    #         for t in range(timeslotsInHour * data.T):
+    #             model.getVarByName(f'S[{i},{d},{t}]').Start = int(sol.S[i,d,t])
+    #             model.getVarByName(f'C[{i},{d},{t}]').Start = int(sol.C[i,d,t])
 
 
 
     model.update()
 
-    model.Params.logFile = f"consol_sol_{i_num}_time_{time}_K_{data['K']}_EX_{i_num}_ver3.1.txt"
+    model.Params.logFile = f"consol_sol_{i_num}_time_{time}_K_{str(k_num)}_EX_{i_num}_ver4.1.txt"
     model.params.TimeLimit = time
     # model.setParam("Method", 2)
-    # model.setParam("MIPFocus", 1)
+    # model.setParam("MIPFocus", 3)
     model.update()
     # for l in range(5):
     #     # model.params.TimeLimit = 60*60
     #     # model.update()
     model.optimize()
-    model.write(f"English_Lesson_WT_K_{data['K']}_EX_{i_num}_ver3.1.lp")  
+    
+    model.write(f"English_Lesson_K_{k_num}_EX_{i_num}_ver4.1.sol")  
+    # groups = get_gurobi_sol_in_alg_sol(model, data)
+    # sol = Solution(group=groups)
+    # if not sol.check_sol_alg(data):
+    #     raise
+    # if not sol.check_sol_math_model(data):
+    #     raise
+    # print(k_num, i_num)
+    # print(sol.check_sol_alg(data))
+    # print(sol.check_sol_math_model(data))
 
-    model.write(f"S_K_{data['K']}_EX_{i_num}_ver3.1.sol")
-    # groups = get_alg_sol(model, data)
-    # import_JSON(groups, name = f"sol_gurobi_ex_{i_num}_time_{time}_ver1.2")
-    # model.write(f"English_lesson_exp_{i_num}_time_{2*60*10}.lp")
+
+def get_gurobi_sol_in_alg_sol(model, data):
+    
+    groups = []
+    groups_id = []
+    for l in range(L):
+        for k in range(K):
+            try:
+                z = int(model.getVarByName(f'z[{k},{l}]').X)
+                # print(z)
+                if z == 0:
+                    break
+                else:
+                    groups_id.append([k,l])
+
+            except:
+                break
+    
+    for id in groups_id:
+        gr = []
+        k = id[0]
+        l = id[1]
+
+        st_list = []
+
+        for j in range(J):
+            course_st = data.courseRec[j][l]
+            if course_st == 0:
+                continue
+            else:
+                y = int(model.getVarByName(f'y[{j},{k}]').X)
+                if y == 1:
+                   st_list.append(j)
+
+        gr.append(st_list)
+        gr.append(k+1)
+        gr.append(l)
+
+        d_1 = []
+        d_2 = []
+
+        for d in range(D):
+            p = int(model.getVarByName(f'p[{d},{k},{l}]').X)
+            if p == 1:
+                if d_1 == []:
+                    d_1.append(d)
+                else:
+                    d_2.append(d)
+                    break
+        
+            
+        d = d_1[0]
+        t_1 = None
+        t_2 = None
+        for t in range(timeslotsInHour*T):
+            if (  int(model.getVarByName(f'c[{d},{t},{k},{l}]').X) + int(model.getVarByName(f's[{d},{t},{k},{l}]').X) - int(model.getVarByName(f'p[{d},{k},{l}]').X)) == 1:
+                if t_1 == None:
+                    t_1 = t
+
+            if (  int(model.getVarByName(f'c[{d},{t},{k},{l}]').X) + int(model.getVarByName(f's[{d},{t},{k},{l}]').X) - int(model.getVarByName(f'p[{d},{k},{l}]').X)) == 0:
+                if t_1 != None:
+                    t_2 = t
+                    break
+        d_1.append(t_1)
+        if t_2 == None:
+            t_2 = timeslotsInHour*T
+        d_1.append(t_2 - 1)
+
+        d = d_2[0]
+        t_1 = None
+        t_2 = None
+        for t in range(timeslotsInHour*T):
+            if (  int(model.getVarByName(f'c[{d},{t},{k},{l}]').X) + int(model.getVarByName(f's[{d},{t},{k},{l}]').X) - int(model.getVarByName(f'p[{d},{k},{l}]').X)) == 1:
+                if t_1 == None:
+                    t_1 = t
+
+            if (  int(model.getVarByName(f'c[{d},{t},{k},{l}]').X) + int(model.getVarByName(f's[{d},{t},{k},{l}]').X) - int(model.getVarByName(f'p[{d},{k},{l}]').X)) == 0:
+                if t_1 != None:
+                    t_2 = t
+                    break
+        d_2.append(t_1)
+        if t_2 == None:
+            t_2 = timeslotsInHour*T
+        d_2.append(t_2 - 1)
 
 
+        gr.append(d_1)
+        gr.append(d_2)
+
+        for i in range(I):
+            u = int(model.getVarByName(f'u[{i},{k},{l}]').X)
+            if u == 1:
+                gr.append(i)
+                break
+        
+        groups.append(gr)
+        
+    
+    return groups
 
 
 
@@ -457,11 +497,16 @@ if __name__ == "__main__":
     
     
     # for k in range(2,10):
-    k = 10
+    # k = 6
 
-    for i in range(1, 11):
+    # main(1, 6, 10)
+    # for i in range(1, 11):
+    # for k in range(4,5):
+    for i in range(1,4):
+        for k in range(7,11):
+        # k = 8
+            main(i, k, 3600)
 
-        main(i, k, 3600)
-
-
+    # for l in [[0,1],[2]]:
+    #     main(1, l, 900)
     

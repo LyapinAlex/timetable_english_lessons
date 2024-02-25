@@ -44,6 +44,7 @@ def read_data(name = None, i = 0):
     data['num_div'] = timeslotsInHour
     
 
+    # print(data)
 
     data['couple_of_Days'] =  get_list_of_couple_of_days(data['D'])
     
@@ -293,5 +294,5 @@ def JSON_import( first_path_sol , filename):
         list_gr.append(g)
 
 
-    with open(filename,'w') as file:
+    with open(filename+".json",'w') as file:
         json.dump(list_gr, file, indent= 3)

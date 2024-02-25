@@ -8,7 +8,7 @@ y_shift = 3
 
 #  запись 
 I = range(10)
-K = range(10)
+K = range(1, 4)
 for i in I:
 
     sheet[y_shift + i][0].value = f"exp {i + 1}"
@@ -17,8 +17,8 @@ for i in I:
     max_obj_val = 0.0
     max_k = None
     for k in K:
-
-        file_name = f"consol_sol_{i + 1}_time_3600_K_{k + 1}_EX_{i + 1}_ver3.1.txt"
+        # print(f"consol_sol_{i + 1}_time_3600_K_{k + 1}_EX_{i + 1}_ver4.1.txt")
+        file_name = f"consol_sol_{i + 1}_time_3600_K_{k + 1}_EX_{i + 1}_ver4.1.txt"
 
         try:
             with open(file_name, 'r' ) as file:
@@ -53,7 +53,8 @@ for i in I:
 
     k = max_k
 
-    file_name = f"consol_sol_{i + 1}_time_3600_K_{k + 1}_EX_{i + 1}_ver3.1.txt"
+    # print(f"consol_sol_{i + 1}_time_3600_K_{k + 1}_EX_{i + 1}_ver4.1.txt")
+    file_name = f"consol_sol_{i + 1}_time_3600_K_{k + 1}_EX_{i + 1}_ver4.1.txt"
 
     try:
         with open(file_name, 'r' ) as file:
@@ -84,5 +85,5 @@ for i in I:
 
 
 
-book.save("Gurobi_exp_1.xlsx")
+book.save("Gurobi_exp.xlsx")
 book.close()
