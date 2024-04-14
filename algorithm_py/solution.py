@@ -23,14 +23,18 @@ class Solution:
 
 
     def init_vars_of_sol(self):
-        self.y = np.zeros( (J, K), dtype = np.int8 )
-        self.z = np.zeros( (K, L), dtype = np.int8 )
-        self.s = np.zeros( (D, timeslotsInHour * T, K, L), dtype = np.int8 )
-        self.c = np.zeros( (D, timeslotsInHour * T, K, L), dtype = np.int8 )
-        self.p = np.zeros( (D, K, L), dtype = np.int8)
 
-        self.u = np.zeros( (I, K, L), dtype = np.int8 )
-        self.U = np.zeros( (I, D, timeslotsInHour * T, K, L), dtype = np.int8 )
+        
+
+
+        self.y = np.zeros( (J, self.K_max), dtype = np.int8 )
+        self.z = np.zeros( (self.K_max, L), dtype = np.int8 )
+        self.s = np.zeros( (D, timeslotsInHour * T, self.K_max, L), dtype = np.int8 )
+        self.c = np.zeros( (D, timeslotsInHour * T, self.K_max, L), dtype = np.int8 )
+        self.p = np.zeros( (D, self.K_max, L), dtype = np.int8)
+
+        self.u = np.zeros( (I, self.K_max, L), dtype = np.int8 )
+        self.U = np.zeros( (I, D, timeslotsInHour * T, self.K_max, L), dtype = np.int8 )
         self.S = np.zeros( (I, D, timeslotsInHour * T), dtype = np.int8 )
         self.C = np.zeros( (I, D, timeslotsInHour * T), dtype = np.int8 )
         self.P = np.zeros( (I, D), dtype = np.int8 )
@@ -107,6 +111,8 @@ class Solution:
             l = gr[2]
             gr[1] = int(couse_count[l])
             couse_count[l]+= 1
+
+        self.K_max = int(np.max(couse_count) - 1)
 
         self.init_vars_of_sol()
 
@@ -288,6 +294,62 @@ class Solution:
 
         with open(name+'.json','w') as file:
             json.dump(list_gr, file, indent= 3)
+
+    def import_sol_format(self, name = "sol"):
+        """Создается файл формата sol"""
+
+        with open(name+'.sol', 'w') as f:
+            f.write(f'# Objective value = {self.get_sol_val()["obj_val"]}\n')
+            
+            str_file = ''
+
+            for j in range(J):
+                for k in range(self.K_max):
+                    str_file+=f'y[{j},{k}] {self.y[j,k]}\n'
+                    
+            for k in range(self.K_max):
+                for l in range(L):
+                    str_file+=f'z[{k},{l}] {self.z[k,l]}\n'
+             
+            
+            for d in range(D):
+                for t in range( timeslotsInHour * T):
+                    for k in range(self.K_max):
+                        for l in range(L):
+                            str_file+=f's[{d},{t},{k},{l}] {self.s[d,t,k,l]}\n'
+                            str_file+=f'c[{d},{t},{k},{l}] {self.c[d,t,k,l]}\n'
+
+            for d in range(D):
+                for k in range(self.K_max):
+                    for l in range(L):
+                        str_file+=f'p[{d},{k},{l}] {self.p[d,k,l]}\n'
+
+            for i in range(I):
+                for k in range(self.K_max):
+                    for l in range(L):
+                       str_file+=f'u[{i},{k},{l}] {self.u[i,k,l]}\n' 
+
+            for i in range(I):
+                for d in range(D):
+                    for t in range( timeslotsInHour * T):
+                        for k in range(self.K_max):
+                            for l in range(L):
+                                str_file+=f'U[{i},{d},{t},{k},{l}] {self.U[i,d,t,k,l]}\n'
+            
+            for i in range(I):
+                for d in range(D):
+                    for t in range( timeslotsInHour * T):
+                        str_file+=f'S[{i},{d},{t}] {self.S[i,d,t]}\n'
+                        str_file+=f'C[{i},{d},{t}] {self.C[i,d,t]}\n'
+
+            for i in range(I):
+                for d in range(D):
+                    str_file+=f'P[{i},{d}] {self.P[i,d]}\n'
+          
+            f.write(str_file)
+            f.close()
+
+        
         
     def timetable_from_sol(self, name= "schedule"): 
         """Создать png файл с таблицей расписания"""
@@ -346,7 +408,7 @@ class Solution:
 
         # (2) Если студент в группе, то он может прийти, когда у этой группы занятие,
         for j in range(J):
-            for k in range(K):
+            for k in range(self.K_max):
                 for l in range(L):
                     if not np.sum((data.courseRec[j, l]*data.timeRec[j, d, t]*(self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])) for d in range(D) for t in range(timeslotsInHour * T)) >= 2*data.courseRec[j, l]* data.timeL[l] * self.y[j, k]:
                         raise "ОШИБКА УСЛОВИЕ 2"
@@ -356,28 +418,28 @@ class Solution:
         #(3) В любой момент времени не может быть больше пар, чем число комнат 
         for d in range(D):
             for t in range(timeslotsInHour * T):
-                if not np.sum((self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])for k in range(K) for l in range(L)) <= r:
+                if not np.sum((self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l])for k in range(self.K_max) for l in range(L)) <= r:
                     raise "ОШИБКА УСЛОВИЕ 3"
 
         #(4) Студент может быть только в одной группе
         for j in range(J):
-           if not np.sum(self.y[j, k] for k in range(K)) <= 1:
+           if not np.sum(self.y[j, k] for k in range(self.K_max)) <= 1:
                raise "ОШИБКА УСЛОВИЕ 4"
 
         #(5.1) Ограничения на максимальное количество студентов в группе
-        for k in range(K):
+        for k in range(self.K_max):
             for l in range(L):
                 if not np.sum(self.y[j, k]*data.courseRec[j, l] for j in range(J)) <= maxN:
                     raise "ОШИБКА УСЛОВИЕ 5.1"
         #(5.2) Ограничения на минимальное количество студентов в группе
-        for k in range(K):
+        for k in range(self.K_max):
             for l in range(L):
                 if not np.sum(self.y[j, k]*data.courseRec[j, l] for j in range(J)) >= minN * self.z[k,l]:
                     raise "ОШИБКА УСЛОВИЕ 5.2"
 
         #(6) Для любой группы в любой день количесво выделеных на нее таймслотов должно равняться продолжительности занятия
         for l in range(L):
-            for k in range(K):
+            for k in range(self.K_max):
                 for d in range(D):
                     if not np.sum((self.c[d, t, k, l] +  self.s[d, t, k, l])for t in range(timeslotsInHour * T)) == (timeslotsInHour * T + data.timeL[l])*self.p[d, k, l]:
                         raise "ОШИБКА УСЛОВИЕ 6" 
@@ -385,18 +447,18 @@ class Solution:
         #(7) Конкретные пары вместе не идут
         D_w = np.arange(0, D - 1, 1)
         for d in D_w:
-            for k in range(K):
+            for k in range(self.K_max):
                 for l in range(L):
                     if not self.p[d, k, l] + self.p[d + 1, k ,l] <= 1:
                         raise "ОШИБКА УСЛОВИЕ 7"
         #(8) Если нет группы, то и нет студента
         for j in range(J):
             for l in range(L):
-                for k in range(K):
+                for k in range(self.K_max):
                     if not self.z[k,l] >= self.y[j,k]*data.courseRec[j,l]:
                         raise "ОШИБКА УСЛОВИЕ 8"
         #(9) Ограничения созданные против борьбы с симметрией
-        K_l = np.arange(0, K - 1, 1)
+        K_l = np.arange(0, self.K_max - 1, 1)
         for l in range(L):
             for k in K_l:
                 if not self.z[k,l] >= self.z[k + 1,l]:
@@ -405,7 +467,7 @@ class Solution:
         T_1 = np.arange(0, timeslotsInHour * T - 1, 1) 
         for d in range(D):
             for t in T_1:
-                for k in range(K):
+                for k in range(self.K_max):
                     for l in range(L):
                        if not self.s[d, t, k, l] <= self.s[d, t + 1, k, l]:
                         raise "ОШИБКА УСЛОВИЕ 10"
@@ -413,26 +475,26 @@ class Solution:
         #(11) условие на непрерывность C
         for d in range(D):
             for t in T_1:
-                for k in range(K):
+                for k in range(self.K_max):
                     for l in range(L):
                         if not self.c[d, t, k, l] >= self.c[d, t + 1, k, l]:
                             raise "ОШИБКА УСЛОВИЕ 11"
         #(12) Для любой группы два рабочих дня
         for l in range(L):
-            for k in range(K):
+            for k in range(self.K_max):
                 if not np.sum((self.p[d, k, l]) for d in range(D)) == 2*self.z[k,l]:
                     raise "ОШИБКА УСЛОВИЕ 12"
 
         #(13) Для каждой сформированной группы есть преподаватель, руководящей ею
         for l in range(L):
-            for k in range(K):
+            for k in range(self.K_max):
                 if not np.sum((self.u[i, k, l]) for i in range(I)) == self.z[k,l]:
                     raise "ОШИБКА УСЛОВИЕ 13"
         #(14) Расписание преподавателя для каждой группы
         for i in range(I):
             for d in range(D):
                 for t in range(timeslotsInHour * T):
-                    for k in range(K):
+                    for k in range(self.K_max):
                         for l in range(L):
                             if not self.U[i, d, t, k, l] <= self.c[d, t, k, l] +  self.s[d, t, k, l] - self.p[d, k, l]:
                                 raise "ОШИБКА УСЛОВИЕ 14"
@@ -444,32 +506,32 @@ class Solution:
         for i in range(I):
             for d in range(D):
                 for t in range(timeslotsInHour * T):
-                    if not np.sum(self.U[i, d, t, k, l] for k in range(K) for l in range(L)) <= 1:
+                    if not np.sum(self.U[i, d, t, k, l] for k in range(self.K_max) for l in range(L)) <= 1:
                         raise "ОШИБКА УСЛОВИЕ 15"
         # (16) После занятия, у преподавателя идет перерыв 
         # for i in range(I):
         #     for d in range(D):
         #         for t in range(timeslotsInHour * T):
-        #             for k in range(K):
+        #             for k in range(self.K_max):
         #                 for l in range(L):
         #                     if t >= timeslotsInHour * T - data.timeL[l] - 1:
         #                         continue
-        #                     for k_1 in range(K):
+        #                     for k_1 in range(self.K_max):
         #                         for l_1 in range(L):
         #                             if not self.U[i, d, t + 1, k, l] - self.U[i, d, t, k, l] + self.U[i, d, t + data.timeL[l] + 1, k_1, l_1] <= 1:
         #                                 raise "ОШИБКА УСЛОВИЕ 16"
         for i in range(I):
             for d in range(D):
                 for t in range(timeslotsInHour * T):
-                    for k_1 in range(K):
+                    for k_1 in range(self.K_max):
                         for l_1 in range(L):
                             if t >= timeslotsInHour * T - 1:
                                 continue
-                            if not np.sum(self.U[i, d, t, k, l] for k in range(K) for l in range(L)) <= self.c[d, t, k_1, l_1] +  self.s[d, t, k_1, l_1] - self.p[d, k_1, l_1] + 1 - self.U[i, d, t + 1, k_1, l_1] :
+                            if not np.sum(self.U[i, d, t, k, l] for k in range(self.K_max) for l in range(L)) <= self.c[d, t, k_1, l_1] +  self.s[d, t, k_1, l_1] - self.p[d, k_1, l_1] + 1 - self.U[i, d, t + 1, k_1, l_1] :
                                 raise "ОШИБКА УСЛОВИЕ 16"
         #(17) Если у преподователя занимается группа в день d, то и он должен работать в этот день
         for i in range(I):
-            for k in range(K):
+            for k in range(self.K_max):
                 for l in range(L):
                     for d in range(D):
                         if not self.p[d, k, l] + self.u[i, k, l] - self.P[i, d] <= 1:
@@ -483,9 +545,9 @@ class Solution:
         for i in range(I):
             for d in range(D):
                 for t in range(timeslotsInHour * T):
-                    if not np.sum(self.U[i, d, t, k, l] for k in range(K) for l in range(L)) <= self.S[i, d, t]:
+                    if not np.sum(self.U[i, d, t, k, l] for k in range(self.K_max) for l in range(L)) <= self.S[i, d, t]:
                         raise "ОШИБКА УСЛОВИЕ 19"
-                    if not np.sum(self.U[i, d, t, k, l] for k in range(K) for l in range(L)) <= self.C[i, d, t]:
+                    if not np.sum(self.U[i, d, t, k, l] for k in range(self.K_max) for l in range(L)) <= self.C[i, d, t]:
                         raise "ОШИБКА УСЛОВИЕ 19"
                     if t + 1 == timeslotsInHour * T:
                         continue
@@ -507,7 +569,7 @@ class Solution:
     def check_sol_alg(self, data):
         
         taken_students = np.zeros(J)
-        create_groups = np.zeros((K,L))
+        create_groups = np.zeros((self.K_max,L))
 
         groups = self.groups
         for group in groups:
@@ -519,7 +581,7 @@ class Solution:
             k = group[1]
             if type(k) is not int:
                 raise f"ОШИБКА ФОРМАТ РЕШЕНИЯ"
-            if  k < 1 or k > K:
+            if  k < 1 or k > self.K_max:
                 raise f"ОШИБКА НОМЕРА ГРУППЫ" 
 
             l = group[2]
@@ -602,7 +664,7 @@ class Solution:
             if not group[5] in range(I):
                 raise f"ОШИБКА ГРУППЕ {k} {l} НЕПРАВИЛЬНО НАЗНАЧЕН ПРЕПОДАВАТЕЛЬ { group[5]}"
             
-        teacher_worktimes = np.zeros((I, K, L, D, timeslotsInHour * T ))
+        teacher_worktimes = np.zeros((I, self.K_max, L, D, timeslotsInHour * T ))
 
         for group in groups:
             k = group[1]

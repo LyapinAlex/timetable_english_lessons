@@ -196,6 +196,15 @@ class Problem:
             self.a =restruct(data['J'], data['D'], data['T'], data['L'], data['timeLessons'], data['timeslot_of_students'], data['course_of_students']  )
             self.b = data['course_of_students'] 
             self.lt = data['timeLessons']
+
+
+        capacity = np.sum(data['course_of_students'], axis=0)
+       
+        Z = []
+        for l in range(L):
+            Z.append(math.ceil(capacity[l]/ 4))
+   
+
         # else:
         #     A = restruct(data['J'], data['D'], data['T'], data['L'], data['timeLessons'], data['timeslot_of_students'], data['course_of_students']  )
 
@@ -425,6 +434,11 @@ class Problem:
                 self.model.addLConstr(gr.quicksum((self.C[i, d, t] +  self.S[i, d, t])for t in range(timeslotsInHour*T)) <= ((len(range(timeslotsInHour*T)) + teacherLimit )*self.P[i, d]))
 
 
+        for l in range(L):
+            capacity = math.floor(np.sum(data['course_of_students'][l]) / 4) + 1
+            self.mode
+
+
         self.model.write(f"English_Lesson_K_{K}_EX_{self.i}_ver4.lp")  
         
         # self.model.write(f"English_Lesson_L_{str(course)}_EX_{self.i}_ver5.lp")  
@@ -546,10 +560,13 @@ def launch():
             
     # creat_subsets_course_problem([[0,1],[2]])
 
-    for i in range(1,11):
-        # k = 9
-        for k in range(9,11):
-            p = Problem(i,  k)
+    # for i in range(1,11):
+        
+    #     for k in range(9,11):
+    #         p = Problem(i,  k)
 
+
+
+    p = Problem(5,  5)
 if __name__ == "__main__":
     launch()

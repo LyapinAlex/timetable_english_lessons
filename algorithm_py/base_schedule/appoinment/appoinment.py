@@ -21,10 +21,13 @@ def appointment(data, sol_1, schedule):
     assigned_groups = []
     
     while(cur_group != None):
+        
+        # print(f" num: {cur_group[1]}  course:  {cur_group[2]} score:  {cur_group}")
+        
         groups[cur_group[2]].remove(cur_group)
         
         group = cur_group
-        cost_group = len(group[0]) - (F[group[2],counter_groups[group[2]]] if counter_groups[group[2]]< K else -2.5 )
+        cost_group = len(group[0]) - (F[group[2],counter_groups[group[2]]] if counter_groups[group[2]]< K else 2.5 )
         # print(cost_group)
         
         if cost_group < 0:
@@ -33,7 +36,7 @@ def appointment(data, sol_1, schedule):
             assigned_groups.append(group)
             cur_group = get_next_group(groups, counter_groups)
             continue
-        
+         
         appropriate_times = []
 
         first_day = group[3]
@@ -66,6 +69,7 @@ def appointment(data, sol_1, schedule):
         
         
     sol_1['groups'] = assigned_groups
+    
     # print(sol_1['groups'])
     # for group in groups:
 
@@ -101,7 +105,10 @@ def appointment(data, sol_1, schedule):
     #         add_group_in_timetable(group, appropriate_times, data, schedule)
 
     
-    # # print(groups)
+    # for gr in assigned_groups:
+    #     if gr[5]:
+    #         print(gr)
+    
     return None
 
 
@@ -109,6 +116,8 @@ def get_next_group(groups, counter_groups):
     
     applicant_group = []
     penalty_group = [ -F[l,counter_groups[l]] if counter_groups[l]< K else -2.5 for l in range(L)]
+    # print(counter_groups)
+    # print(penalty_group)
     for group_course in groups:
         if group_course == []:
             applicant_group.append([])
@@ -147,8 +156,21 @@ def get_next_group(groups, counter_groups):
     
     group = applicant_group[0]
     
-    cost_group = len(group[0]) - penalty_group[group[2]] 
+    cost_group = len(group[0]) + penalty_group[0] 
     
+
+    # for i in range(len((applicant_group))):
+    #     gr = applicant_group[i]
+    #     if gr == []:
+    #         break
+    #     print(f" num: {gr[1]}  course:  {gr[2]} score: {len(gr[0]) + penalty_group[i]}")
+    
+
+    # print()
+    # print(f" num: {group[1]}  course:  {group[2]} score:  {cost_group}")
+    # print()
+    
+
     return group if cost_group > 0 else None
     
     
