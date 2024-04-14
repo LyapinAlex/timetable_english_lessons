@@ -307,7 +307,7 @@ def launch():
         # data.students_stats()
         print(data.up_bound())
         
-    raise
+    # raise
     filename_sol = f"sol_{i}"
     # filename_sol = f"sol_gurobi_ex_{i}_time_3600_ver1.1"
     # sol = Solution( os.path.join(path, filename_sol))
@@ -503,7 +503,7 @@ def alg(i):
 
     
     data = Data(J, L, I, T , D, r, minN, maxN, timeL )
-    filename_data = f"examples_copy\\orders_3_{i}.txt"
+    filename_data = f"examples_copy\\orders_1_{i}.txt"
     data.read_input(filename_data)
 
     return data.up_bound()

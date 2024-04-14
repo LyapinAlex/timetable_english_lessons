@@ -278,28 +278,44 @@ def get_alg_sol(model, data):
     return groups
 
 
-def main(i_num, k_num, time = None):
+def main(i_num, k_num, time = 3600):
     
-
-    # file_name = f"sol_ex_{i_num}_dim_3.json"
+    # i_num = 1
+    # dim = 1
+    data = Data(J, L, I, T , D, r, minN, maxN, timeL )
+    # filename_data = f"examples_copy\\orders_2_{i_num}.txt"
+    filename_data = f"examples_copy\\orders_4_{i_num}.txt"
+    data.read_input(filename_data)
+    # file_name = f"sol_ex_{i_num}_dim_{dim}.json"
 
     # sol = Solution(file_name)
-  
+
+    # print(sol.check_sol_alg(data))
+    # print(sol.check_sol_math_model(data))
+
+    # K = np.zeros(L)
+    # for group in sol.groups:
+    #     K[group[2]]+=1
+
+    # print(K)
 
     # # data = read_data(f"examples_copy\\orders_1_{i_num}.txt", k=k_num)
     
-    # data = Data(J, L, I, T , D, r, minN, maxN, timeL )
-    # filename_data = f"examples_copy\\orders_2_{i_num}.txt"
-    # data.read_input(filename_data)
 
     model_name = f"English_Lesson_K_{k_num}_EX_{i_num}_ver4.lp"
+
+    # model_name= "English_Lesson_K_7_EX_1_ver4.lp"
+    # model_name = "test.lp"
 
     # model_name = f"English_Lesson_L_{str(k_num)}_EX_{i_num}_ver5.lp"
     model = gr.read(model_name)
 
 
     # sol_name = f"S_K_{k_num}_EX_{i_num}_ver4.1.sol"
-    # # Чтение решения
+    # sol_name = "S_K_6_EX_1_ver4.1.sol"
+    # sol_name = "alg_1_dim_1.sol"
+    # sol_name = "test_sol.sol"
+    # # # Чтение решения
     # model.read(sol_name)
     # model.update()
 
@@ -366,9 +382,10 @@ def main(i_num, k_num, time = None):
 
 
 
-    model.update()
+    # model.update()
 
     model.Params.logFile = f"consol_sol_{i_num}_time_{time}_K_{str(k_num)}_EX_{i_num}_ver4.1.txt"
+    model.Params.logFile = "test_info.txt"
     model.params.TimeLimit = time
     # model.setParam("Method", 2)
     # model.setParam("MIPFocus", 3)
@@ -378,24 +395,37 @@ def main(i_num, k_num, time = None):
     #     # model.update()
     model.optimize()
     
-    model.write(f"English_Lesson_K_{k_num}_EX_{i_num}_ver4.1.sol")  
-    # groups = get_gurobi_sol_in_alg_sol(model, data)
-    # sol = Solution(group=groups)
+    # model.write(f"English_Lesson_K_{k_num}_EX_{i_num}_ver4.1.sol")  
+    model.write(f"test_sol1.sol") 
+
+
+    groups = get_gurobi_sol_in_alg_sol(model, data)
+    sol = Solution(group=groups)
     # if not sol.check_sol_alg(data):
     #     raise
     # if not sol.check_sol_math_model(data):
     #     raise
     # print(k_num, i_num)
-    # print(sol.check_sol_alg(data))
-    # print(sol.check_sol_math_model(data))
+    print(sol.check_sol_alg(data))
+    print(sol.check_sol_math_model(data))
+
+    # K = np.zeros(L)
+    # for group in groups:
+    #     K[group[2]]+=1
+
+    # print(K)
+
+
+
+
 
 
 def get_gurobi_sol_in_alg_sol(model, data):
-    
+
     groups = []
     groups_id = []
-    for l in range(L):
-        for k in range(K):
+    for k in range(K):
+        for l in range(L):
             try:
                 z = int(model.getVarByName(f'z[{k},{l}]').X)
                 # print(z)
@@ -496,17 +526,19 @@ def get_gurobi_sol_in_alg_sol(model, data):
 if __name__ == "__main__":
     
     
+    # main(1,1,3600)
     # for k in range(2,10):
     # k = 6
 
     # main(1, 6, 10)
     # for i in range(1, 11):
     # for k in range(4,5):
-    for i in range(1,4):
-        for k in range(7,11):
-        # k = 8
-            main(i, k, 3600)
+    # for i in range(1,4):
+    #     for k in range(7,11):
+    #     # k = 8
+    #         main(i, k, 3600)
 
-    # for l in [[0,1],[2]]:
-    #     main(1, l, 900)
+    for i in range(3):
+        for k in range(6,10):
+            main(i + 1 , k + 1, 3600)
     

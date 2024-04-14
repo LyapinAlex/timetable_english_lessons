@@ -1,5 +1,5 @@
-*.lp
-*.json
-*.txt
-*.sol
-*__pycache__*
+**.lp
+**.json
+**.txt
+**.sol
+**__pycache__**

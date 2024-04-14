@@ -34,12 +34,10 @@ def algorithm(i, locationParams = None, solutionsFromDB = None):
     
 
 
-    JSON_import( first_path_sol, f"sol_ex_{i}_dim_{2}" )
+    # JSON_import( first_path_sol, f"sol_ex_{i}_dim_{2}" )
 
     return get_objVal(data, first_path_sol, second_path_sol)
-    # sol = get_solution( first_path_sol)
-    # sol_export_gurobi(data, first_path_sol, second_path_sol)
-    # return sol
+
 
 if __name__ == "__main__":
 
@@ -56,12 +54,10 @@ if __name__ == "__main__":
     
     for i in range(1,11):
         data = Data(J, L, I, T , D, r, minN, maxN, timeL )
-        filename_data = f"examples_copy\\orders_4_{i}.txt"
+        filename_data = f"examples_copy\\orders_1_{i}.txt"
         data.read_input(filename_data)
-
-        data.up_bound()
-        
-
-        # filename_sol = f"sol_ex_{i}_dim_3.json"
-        # sol = Solution(filename_sol)
-        # print(sol.get_sol_val())
+        filename_sol = f"sol_ex_{i}_dim_1.json"
+        sol = Solution(filename_sol)
+        sol.import_sol_format(name = f'alg_{i}_dim_1')
+        break
+        print(sol.get_sol_val())

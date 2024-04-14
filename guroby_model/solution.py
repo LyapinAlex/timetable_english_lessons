@@ -6,7 +6,7 @@ from tabulate import tabulate
 import pdb
 # from sol_analys.params import *
 
-K = 15
+K = 20
 
 class Solution:
     

@@ -101,7 +101,7 @@ class Data:
     def up_bound(self):
         
         num_gr_of_course = np.floor(np.divide(np.sum(self.courseRec, axis=0), self.maxN))
-        print(num_gr_of_course.tolist())
+
         rem_st_of_course = np.mod(np.sum(self.courseRec, axis=0), self.maxN)
         # print(np.sum(self.courseRec, axis=0))
         # print(num_gr_of_course)
