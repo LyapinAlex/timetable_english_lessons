@@ -18,7 +18,12 @@ public:
 	int id_teacher;
 	int first_time_end;
 	int second_time_end;
+	float score;
 	bool working = false;
+	//
+	std::pair<int, int> expand_time_first_day;
+	std::pair<int, int> expand_time_second_day;
+
 
 	Group(vector<int> list, int num, int course, int d_1, int d_2, int t_1, int t_2) {
 		list_students = list;
@@ -28,6 +33,7 @@ public:
 		second_day = d_2;
 		first_time = t_1;
 		second_time = t_2;
+		score = list.size();
 
 	}
 
@@ -42,9 +48,15 @@ public:
 		cout << "c_g" << " " << course_group << '\n';
 		cout << "days_g" << " " << first_day << " " << second_day << '\n';
 		cout << "times_g" << " " << first_time << " " << second_time << '\n';
+		cout << "times_g" << " " << first_time_end << " " << second_time_end << '\n';
 
 
 	}
+
+	bool operator==(const Group& other) const {
+		return this->list_students.size() == other.list_students.size() && std::equal(this->list_students.begin(), this->list_students.end(), other.list_students.begin(), other.list_students.end());
+	}
+
 };
 
 

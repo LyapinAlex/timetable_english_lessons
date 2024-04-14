@@ -72,7 +72,8 @@ void read_data(int number_example, short (&students_record)[J][D][T], short (&st
 
 
 
-vector<double> creat_timetable(int number_example)
+void creat_timetable(int number_example)
+//vector<double> creat_timetable(int number_example)
 {
 	clock_t t_1 = clock();
 	short students_record[J][D][T];
@@ -85,17 +86,21 @@ vector<double> creat_timetable(int number_example)
 	create_schedule(students_record, students_courses, &f_sol);
 	clock_t t_4 = clock();
 
+
+
+	/* ¬–≈ћя
 	double preproc = (double)(t_2 - t_1) / CLOCKS_PER_SEC;
 	double f_path = (double)(t_3 - t_2) / CLOCKS_PER_SEC;
 	double s_path = (double)(t_4 - t_3) / CLOCKS_PER_SEC;
 
-	/*
 	cout << "preproc =" << preproc << endl;
 	cout << "f_path =" << f_path << endl;
 	cout << "s_path =" << s_path << endl;
-	*/
 	vector<double> v = { preproc , f_path , s_path };
 	return v;
+	*/
+
+
 };
 
 
@@ -103,20 +108,28 @@ vector<double> creat_timetable(int number_example)
 int main()
 {
 
+	//creat_timetable(2);
 
+	/* расчет 10 примеров
+	*/
+	for (int ex = 0; ex < 10; ex++) {
+		creat_timetable(ex + 1);
+
+	}
+
+
+		/* –јсчет времени
 	for (int ex = 0; ex < 10; ex++) {
 		cout << "Example " << ex + 1 << endl;
 		double preproc = 0;
 		double f_path = 0;
 		double s_path = 0;
 
-		/*
 		vector<double> t = creat_timetable(ex + 1);
 
 		preproc += t[0];
 		f_path += t[1];
 		s_path += t[2];
-		*/
 
 		for (int it = 0; it < 5; it++) {
 			vector<double> t = creat_timetable(ex + 1);
@@ -137,6 +150,7 @@ int main()
 		cout << endl;
 
 	}
+		*/
 
 	//cout << "time" << seconds;
 

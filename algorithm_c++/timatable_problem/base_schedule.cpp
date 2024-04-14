@@ -2,16 +2,107 @@
 #include "base_group.hpp"
 #include <algorithm>
 #include <math.h>
+#include <optional>
+#include <cmath>
+#include <ranges>
 
 void reform(short(&students_record)[J][D][T], Group* g);
+void new_add_group_in_timetable(Group* gr, vector<vector<int>>* appropriate_time, short(&students_record)[J][D][T], short(&students_courses)[J][L], Second_sol* s_sol);
+void new_marker_days(int i, Group* gr, int t_1, int t_2, Second_sol* s_sol);
+void new_appoint(short(&students_record)[J][D][T], short(&students_courses)[J][L], First_sol* f_sol, Second_sol* s_sol);
+
+/*
+*/
+bool greatest(Group* A, Group* B) {
+	
+
+	float num_gr_a = (*A).score;
+	float num_gr_b = (*B).score;
+
+	if (num_gr_b == 0)
+		return true;
+	else {
+		if (num_gr_a == 0)
+			return false;
+		else {
+			if (num_gr_a > num_gr_b)
+				return true;
+			if (num_gr_a < num_gr_b)
+				return false;
+			else {
+		
+
+				int t_A = Real_time - max((*A).first_time_end + 1 - timeLesssons[(*A).course_group] + 1 - (*A).first_time, (*A).second_time_end + 1 - timeLesssons[(*A).course_group] + 1 - (*A).second_time);
+				int t_B = Real_time - max((*B).first_time_end + 1 - timeLesssons[(*B).course_group] + 1 - (*B).first_time, (*B).second_time_end + 1 - timeLesssons[(*B).course_group] + 1 - (*B).second_time);
+
+				if (t_A > t_B)
+					return true;
+				if (t_A < t_B)
+					return false;
+				else {
+
+					int a_3 = L - (*A).course_group;
+					int b_3 = L - (*B).course_group;
+
+					if (a_3 > b_3)
+						return true;
+					else
+						return false;
+
+
+				}
+
+
+			}
+
+		}
+
+	}
+
+
+
+
+
+}
+
+void sorting_new(vector<Group>* vec_gr) {
+
+	int len_size = (*vec_gr).size();
+
+	for (int k_1 = 0; k_1 < len_size; k_1++) {
+		for (int k_2 = 0; k_2 < len_size; k_2++) {
+			
+			/*
+
+			float num_gr_a = (*vec_gr)[k_1].score;
+			float num_gr_b = (*vec_gr)[k_2].score;
+
+			int num_gr_a = (*vec_gr)[k_1].list_students.size();
+			int num_gr_b = (*vec_gr)[k_2].list_students.size();
+			*/
+
+
+			if (greatest(&(*vec_gr)[k_1], &(*vec_gr)[k_2])) {
+				//if ((*vec_gr)[k_1].list_students.size() > (*vec_gr)[k_2].list_students.size()) {
+
+				Group rez = (*vec_gr)[k_1];
+				(*vec_gr)[k_1] = (*vec_gr)[k_2];
+				(*vec_gr)[k_2] = rez;
+			}
+
+
+		}
+
+	}
+
+}
 
 
 void sorting(vector<Group>* vec_gr) {
 
 	for (int k_1 = 0; k_1 < 86; k_1++) {
 		for (int k_2 = 0; k_2 < 86; k_2++) {
-			/*
-			*/
+			
 			
 			int t_A = max((*vec_gr)[k_1].first_time_end - (*vec_gr)[k_1].first_time, (*vec_gr)[k_1].second_time_end - (*vec_gr)[k_1].second_time);
 			int t_B = max((*vec_gr)[k_2].first_time_end - (*vec_gr)[k_2].first_time, (*vec_gr)[k_2].second_time_end - (*vec_gr)[k_2].second_time);
@@ -60,6 +151,7 @@ bool comp_size(Group A, Group B) {
 }
 
 
+
 void change_format_group(short(&students_record)[J][D][T], short(&students_courses)[J][L], First_sol* f_sol, Second_sol *s_sol)
 {
 	int K = 0;
@@ -76,11 +168,17 @@ void change_format_group(short(&students_record)[J][D][T], short(&students_cours
 	vec_gr.reserve(K);
 
 	for (int l = 0; l < L; l++) {
-		for (Group x : f_sol->groups[l]) {
+		for (Group& x : f_sol->groups[l]) {
+
 			reform(students_record, &x);
 			vec_gr.push_back(x);
 		}
 	}
+
+
+	for (int l = 0; l < L; l++) 
+		sorting_new(&(f_sol->groups[l]));
+
 
 	sorting(&vec_gr);
 	/*
@@ -100,9 +198,22 @@ void create_schedule(short(&students_record)[J][D][T], short(&students_courses)[
 
 	Second_sol  s_sol;
 
-	change_format_group(students_record, students_courses, f_sol, &s_sol);
 
-	appoint(students_record, students_courses, &s_sol);
+
+	/*
+	for (auto gr : f_sol->groups[7]) {
+		gr.Print_info();
+	}
+	*/
+
+	change_format_group(students_record, students_courses, f_sol, &s_sol);
+	/*
+	for (auto gr : f_sol->groups[7]) {
+		gr.Print_info();
+	}
+	*/
+
+	new_appoint(students_record, students_courses, f_sol,&s_sol);
 
 
 }
@@ -154,10 +265,21 @@ void reform(short(&students_record)[J][D][T], Group *g) {
 		}
 	}
 
+
+	// CHANGE: 44 ->40
+	/*
 	if (board_exp_time_first.second == -1)
 		board_exp_time_first.second = 44;
 	if (board_exp_time_second.second == -1)
 		board_exp_time_second.second = 44;
+	*/
+
+	if (board_exp_time_first.second == -1)
+		board_exp_time_first.second = 40;
+	if (board_exp_time_second.second == -1)
+		board_exp_time_second.second = 40;
+
+
 
 	(*g).first_time = board_exp_time_first.first;
 	(*g).second_time = board_exp_time_second.first;
@@ -181,6 +303,182 @@ bool check_limit_work_time(int i, Group *gr, int t_1, int t_2, short(&students_r
 
 vector<int> get_list_teacher(Second_sol *s_sol);
 void marker_days(int i, int id_gr, int best_time_1, int best_time_2, Second_sol* s_sol);
+
+std::optional<Group> get_next_group(vector<vector<Group>>* groups, vector<int> counter_group) 
+{
+
+	vector<Group> applicant_group;
+	
+
+
+	for (int l = 0; l < L; l++)
+		if ((*groups)[l].size() != 0) {
+
+			
+			//std::cout << (*groups)[l][0].list_students.size()  << endl;
+			applicant_group.push_back((*groups)[l][0]);
+		}
+
+	/*
+	for (auto x : counter_group)
+		std::cout << x << "  ";
+	std::cout << endl;
+	*/
+
+	for (Group& group: applicant_group) {
+
+		double penalty;
+
+		if (counter_group[group.course_group] < K)
+			penalty = F[group.course_group][counter_group[group.course_group]];
+		else
+			penalty = 2.5;
+
+		double num_st = group.list_students.size();
+		//std::cout << num_st <<" " << penalty << endl;
+		//std::cout << num_st - penalty << endl;
+
+		group.score = (float)(num_st - penalty);
+		//std::cout << group.score << endl;
+
+		
+	//	std::cout << "num :" << group.num_group << " cource: " << group.course_group << " score: " << group.score << endl;
+	}
+
+	sorting_new(&applicant_group);
+
+	/*
+	for (auto& group : applicant_group) {
+		std::cout << "num :" << group.num_group << " cource: " << group.course_group << " score: " << group.score << endl;
+	}
+	*/
+
+	if ((applicant_group.size() == 0) || (applicant_group[0].score <= 0.0)) {
+		//std::cout << endl << " None group " << endl;
+		return std::nullopt;
+	}
+	else 
+	{
+
+
+		//(applicant_group[0]).Print_info();
+		//std::cout << endl << "num :" << applicant_group[0].num_group << " cource: " << applicant_group[0].course_group << " score: " << applicant_group[0].score << endl << endl;
+
+
+	
+		return applicant_group[0];
+	}
+
+
+
+	
+}
+
+void new_appoint(short(&students_record)[J][D][T], short(&students_courses)[J][L],First_sol* f_sol, Second_sol* s_sol)
+{	
+
+
+	vector<vector<Group>> groups = f_sol->groups;
+	
+	vector<int> counter_group(L, 0);
+
+
+
+	std::optional<Group> cur_group = get_next_group(&groups, counter_group);
+
+	vector<Group> assigned_groups;
+
+	while (cur_group) {
+
+		//std::cout << "num :" << cur_group->num_group << " cource: " << cur_group->course_group << " score: " << cur_group->score << endl;
+
+		groups[cur_group->course_group].erase(std::remove(groups[cur_group->course_group].begin(), groups[cur_group->course_group].end(), *cur_group),groups[cur_group->course_group].end());
+		
+		Group group = *cur_group;
+
+		/*
+		float penalty;
+		//change K type -> const int in params.hpp
+		if (counter_group[group.course_group] < K)
+			penalty = (float)F[group.course_group, counter_group[group.course_group]];
+		else
+			penalty = 2.5;
+
+		float cost_group = group.list_students.size() - penalty;
+		*/
+
+		if (group.score < 0){
+			group.working = false;
+			group.id_teacher = -1;
+			assigned_groups.push_back(group);
+			cur_group = get_next_group(&groups, counter_group);
+			continue;
+		}
+
+		vector<vector<int>> appropriate_times;
+
+		for (int t_1 = group.first_time; t_1 < 4 + group.first_time_end; t_1++)
+			for (int t_2 = group.second_time; t_2 < 4 + group.second_time_end; t_2++)
+				for (int i = 0; i < I; i++) {
+
+
+					if (check_in_timetable(t_1, t_2, &group, i, students_record, students_courses, s_sol)) {
+						vector<int> v = { t_1, t_2, i };
+						appropriate_times.push_back(v);
+
+
+					}
+				}
+
+
+		if (appropriate_times.size() != 0) {
+			counter_group[group.course_group]+=1;
+			group.working = true;
+			assigned_groups.push_back(group);
+			new_add_group_in_timetable(&group, &appropriate_times, students_record, students_courses, s_sol);
+			cur_group = get_next_group(&groups, counter_group);
+			continue;
+		}
+		else {
+			group.working = false;
+			group.id_teacher = -1;
+			assigned_groups.push_back(group);
+			cur_group = get_next_group(&groups, counter_group);
+			continue;
+		}
+
+
+
+
+
+	}
+
+
+	//assigned_groups[0].Print_info();
+
+	int sum_st = 0;
+	int sum_gr = 0;
+	float obj = 0;
+	
+
+
+	for (auto& gr : assigned_groups) {
+		if (gr.working) {
+			//gr.Print_info();
+			sum_st += gr.list_students.size();
+			sum_gr++;
+			obj += gr.score;
+		}
+
+	}
+
+	cout << "Second_part st = " << sum_st << " gr = " << sum_gr << " objval = " << obj << endl;
+
+
+
+}
+
+
 
 void appoint(short(&students_record)[J][D][T], short(&students_courses)[J][L], Second_sol* s_sol)
 {
@@ -226,16 +524,18 @@ void appoint(short(&students_record)[J][D][T], short(&students_courses)[J][L], S
 	 
 	int sum_st = 0;
 	int sum_gr = 0;
+	float obj = 0;
 	for (Group gr : (*s_sol).sort_groups) {
 		if (gr.working) {
 
 			sum_st += gr.list_students.size();
 			sum_gr++;
+			obj += gr.score;
 		}
 
 	}
 
-	cout << "Second_part st = " << sum_st << " gr = " << sum_gr << endl;
+	
 
 
 
@@ -477,6 +777,87 @@ bool check_limit_work_time(int i, Group *gr, int t_1, int t_2, short(&students_r
 
 int choose_best_time_for_teachers(int course, int day, vector<int> time_first_day, int i, Second_sol *s_sol);
 
+void new_add_group_in_timetable(Group* gr, vector<vector<int>>* appropriate_time, short(&students_record)[J][D][T], short(&students_courses)[J][L], Second_sol* s_sol) {
+
+	vector<int> teacher = get_list_teacher(s_sol);
+
+
+	for (int i : teacher) {
+
+		vector<pair<int, int>> place_timetable_for_i;
+
+		for (vector<int> t : *appropriate_time) {
+			if (t[2] == i) {
+				pair<int, int> a(t[0], t[1]);
+				place_timetable_for_i.push_back(a);
+			}
+		}
+
+		int best_time_1 = -1;
+		int best_time_2 = -1;
+		if (place_timetable_for_i.size() == 0)
+			continue;
+		else {
+
+			int wotk_time_teacher_i = 0;
+			for (int t = 0; t < Real_time; t++)
+				wotk_time_teacher_i += (*s_sol).schedule_of_teachers[i][(*gr).first_day][t];
+
+			if (wotk_time_teacher_i == 0) {
+
+				int distance_to_mid_day = Real_time;
+
+				for (pair<int, int> time : place_timetable_for_i) {
+					if (fabs(Real_time / 2 - time.first) < distance_to_mid_day) {
+						distance_to_mid_day = fabs(Real_time / 2 - time.first);
+						best_time_1 = time.first;
+					}
+				}
+			}
+			else {
+				vector<int> time_first_day;
+				for (pair<int, int> time : place_timetable_for_i) {
+					time_first_day.push_back(time.first);
+				}
+
+				best_time_1 = choose_best_time_for_teachers((*gr).course_group, (*gr).first_day, time_first_day, i, s_sol);
+			}
+
+
+			wotk_time_teacher_i = 0;
+			for (int t = 0; t < Real_time; t++)
+				wotk_time_teacher_i += (*s_sol).schedule_of_teachers[i][(*gr).second_day][t];
+
+			if (wotk_time_teacher_i == 0) {
+
+				int distance_to_mid_day = Real_time;
+
+				for (pair<int, int> time : place_timetable_for_i) {
+					if (fabs(Real_time / 2 - time.second) < distance_to_mid_day) {
+						distance_to_mid_day = fabs(Real_time / 2 - time.second);
+						best_time_2 = time.second;
+					}
+				}
+			}
+			else {
+				vector<int> time_second_day;
+				for (pair<int, int> time : place_timetable_for_i) {
+					time_second_day.push_back(time.second);
+				}
+
+				best_time_2 = choose_best_time_for_teachers((*gr).course_group, (*gr).second_day, time_second_day, i, s_sol);
+			}
+
+
+		}
+
+		new_marker_days(i, gr, best_time_1, best_time_2, s_sol);
+		break;
+
+	}
+}
+
+
 void add_group_in_timetable(int id_gr, vector<vector<int>> *appropriate_time, short(&students_record)[J][D][T], short(&students_courses)[J][L], Second_sol* s_sol) {
 
 	vector<int> teacher = get_list_teacher(s_sol);
@@ -599,6 +980,36 @@ int choose_best_time_for_teachers(int course, int day, vector<int> times_day, in
 
 	return best_time;
 }
+
+void new_marker_days(int i, Group* gr, int t_1, int t_2, Second_sol* s_sol)
+{
+
+
+
+	for (int t_real = 0; t_real < timeLesssons[(*gr).course_group]; t_real++) {
+		(*s_sol).schedule_of_teachers[i][(*gr).first_day][t_1 + t_real] = 1;
+		(*s_sol).schedule_of_teachers[i][(*gr).second_day][t_2 + t_real] = 1;
+	}
+
+
+	(*s_sol).teachers_work_days[(*gr).first_day][i] = 1;
+	(*s_sol).teachers_work_days[(*gr).second_day][i] = 1;
+
+	gr->working = true;
+	gr->id_teacher = i;
+
+	/*
+	(*s_sol).sort_groups[id_gr].first_time = t_1;
+	(*s_sol).sort_groups[id_gr].first_time_end = t_1 + timeLesssons[(*gr).course_group] - 1;
+	(*s_sol).sort_groups[id_gr].second_time = t_2;
+	(*s_sol).sort_groups[id_gr].second_time_end = t_2 + timeLesssons[(*gr).course_group] - 1;
+
+	(*s_sol).sort_groups[id_gr].id_teacher = i;
+	(*s_sol).sort_groups[id_gr].working = true;
+	*/
+
+}
+
 
 void marker_days(int i, int id_gr, int t_1, int t_2, Second_sol* s_sol)
 {

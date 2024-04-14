@@ -2,6 +2,7 @@
 #include "params.hpp"
 #include "base_group.hpp"
 #include <vector>
+#include <optional>
 
 
 
